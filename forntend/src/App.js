@@ -4,9 +4,9 @@ import {Routes,Route,Navigate} from 'react-router-dom'
 import Home from './component/MiniPOS';
 import Won from './component/Won';
 import NotFound from './component/NotFound';
-import AboutDe from './component/signIn';
-import Sign from './component/SignUp';
 import Dashboard from './component/Dashboard';
+import Signup from './component/Signup';
+import SignIn from './component/Signin';
 
 function App() {
   return (
@@ -14,8 +14,9 @@ function App() {
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/about' element={<Won/>}/>
-        <Route path='/SignIn' element={<AboutDe/>}/>
-        <Route path='/Signup' element={<Sign/>}/>
+        {/* <Route path='/SignIn' element={<AboutDe/>}/> */}
+        <Route path='/SignIn' element={<SignIn/>}/>
+        <Route path='/Signup' element={<Signup/>}/>
         <Route path='/Dashboard' element={<Dashboard/>}/>
         <Route path='/home' element={<Navigate to='/'/>}/>
         <Route path='*' element={<NotFound/>}/>

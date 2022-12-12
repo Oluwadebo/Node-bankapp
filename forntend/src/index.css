@@ -139,3 +139,58 @@ code {
   font-size: 40px;
   z-index: 1;
 }
+.ade {
+  height: 1px;
+}
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid white;
+  border-right: 16px solid whitesmoke;
+  border-bottom: 16px solid whitesmoke;
+  border-left: 16px solid #210F60;
+  width: 40px;
+  height: 40px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.spin {
+  float: right;
+  animation: mo 2s infinite alternate;
+}
+@keyframes mo {
+  0% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(-3px);
+  }
+}
+.gose {
+  float: right;
+  animation: mover 2s infinite alternate;
+}
+@keyframes mover {
+  0% {
+    transform: translateY(-40px);
+  }
+  100% {
+    transform: translateY(-40px);
+  }
+}

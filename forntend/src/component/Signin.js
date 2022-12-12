@@ -1,52 +1,95 @@
 import React from 'react'
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useParams, useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import * as yup from "yup";
+import { useFormik } from "formik";
+import axios from 'axios';
+import { baseUrl } from "./endpoint";
 import svgexport30 from './assets/pic/svgexport-30.png'
 import svgexport31 from './assets/pic/svgexport-31.png'
 import opalogo from './assets/pic/logo-light.png'
 import download from './assets/pic/download.png'
 import svgexport1 from './assets/pic/svgexport-1.png'
 
-const AboutDe = () => {
-  const [email, setemail] = useState("")
-  const [password, setpassword] = useState("")
-  const [allUser, setallUser] = useState([])
+const SignIn = () => {
   const [Error, setError] = useState('')
+  const [loader, setloader] = useState(false)
   const navigate = useNavigate()
-  useEffect(() => {
-    if (localStorage.member) {
-      let detail = JSON.parse(localStorage.member)
-      setallUser(detail)
-    } else {
-      setallUser([])
-    }
-  }, [])
-  const signin = () => {
-    let debo = JSON.parse(localStorage.getItem("member"))
-    if (email !== "" && password !== "") {
-      for (const a of debo) {
-        let User = { email, password }
-        if (a["email"] === User.email && a["password"] === User.password) {
-          localStorage.signinEmail = JSON.stringify(email);
-          localStorage.users = JSON.stringify(a)
-          navigate('/Dashboard')
-        } else {
-          let err = "Please confirm you fill input outlet correctly"
-          setError(err)
-        }
-      }
-    } else {
-      let err = "Please fill all your input outlet"
-      setError(err)
-    }
-  }
+  // const signin = () => {
+  //   let debo = JSON.parse(localStorage.getItem("member"))
+  //   if (email !== "" && password !== "") {
+  //     for (const a of debo) {
+  //       let User = { email, password }
+  //       if (a["email"] === User.email && a["password"] === User.password) {
+  //         localStorage.signinEmail = JSON.stringify(email);
+  //         localStorage.users = JSON.stringify(a)
+  //         navigate('/Dashboard')
+  //       } else {
+  //         let err = "Please confirm you fill input outlet correctly"
+  //         setError(err)
+  //       }
+  //     }
+  //   } else {
+  //     let err = "Please fill all your input outlet"
+  //     setError(err)
+  //   }
+  // }
   let myStyle = {
     fontSize: '20px',
   }
   let mySpa = {
     color: '#1FC69D'
   }
+  let lower = new RegExp(`(?=.*[a-z])`);
+  let upper = new RegExp(`(?=.*[A-Z])`);
+  let number = new RegExp(`(?=.*[0-9])`);
+  const Formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    onSubmit: (values) => {
+      setloader(prev => true)
+      axios.post(`${baseUrl}signin`, values).then((credentials) => {
+        if (credentials) {
+          let Err = credentials.data.message;
+          if (Err == "Email not found") {
+            setloader(prev => false)
+            setError("Email not found");
+          } else if (Err == "Invaild password") {
+            setloader(prev => false)
+            setError("Invaild password");
+          } else {
+            if (Err == "Token generated") {
+              localStorage.customer = credentials.data.token
+              setloader(prev => false)
+              // navigate("/")
+            }
+          }
+        }
+      })
+    },
+    validationSchema: yup.object({
+      email: yup.string().required("This field is required").email("must be a valid email"),
+      password: yup.string().required("This field is required").matches(lower, "Must include lowerCase letter").matches(upper, "Must include upperCase letter").matches(number, "Must include a number").min(5, "must be greater than 5 charaters"),
+    }),
+  });
+  const toggle = useRef();
+  const i = useRef();
+  const password = useRef();
+
+  const showHide = () => {
+    if (password.current.type === "password") {
+      password.current.setAttribute("type", "text");
+      toggle.current.classList.add("hide");
+      i.current.classList = "fa fa-eye-slash";
+    } else {
+      password.current.setAttribute("type", "password");
+      i.current.classList = "fa fa-eye";
+      toggle.current.classList.remove("hide");
+    }
+  };
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-light fixed-top shadow">
@@ -96,27 +139,49 @@ const AboutDe = () => {
             <div className="col-12 col-md-6 rig">
               <img src={opalogo} alt="" className='img-fluid mx-auto mt-5' />
               <h5><b>Welcome back.</b></h5>
-              <div className='form-floating mt-4'>
-                <input type="email" placeholder='Your email' className='form-control' onChange={(e) => setemail(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
-                <label>&#x1F4E7;&nbsp; Your email</label>
-              </div>
-              <div className='form-floating my-4'>
-                <input type="password" placeholder='Your password' maxLength={10} className='form-control' onChange={(e) => setpassword(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
-                <label>&#x1F512;&nbsp; Your password</label><br />
-                <button onClick={signin} className='btn form-control py-3' style={{ background: '#1FC69D', border: 'none' }}>Sign-In</button>
-              </div>
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="row">
-                    <div className="col-8">
-                      <p style={{ opacity: '0.6' }}>Don't have an account?</p>
+              <form action="" onSubmit={Formik.handleSubmit}>
+                <div className="form-floating mt-3 mb-4">
+                  <input type="email" placeholder="Your email" className={Formik.errors.email && Formik.touched.email ? "form-control is-invalid" : "form-control"} onChange={Formik.handleChange} style={{ backgroundColor: "#F5F7FA" }} name="email" onBlur={Formik.handleBlur} />
+                  {Formik.touched.email && (
+                    <div style={{ color: "red" }} className="ade">
+                      {Formik.errors.email}
                     </div>
-                    <div className="col-4">
-                      <p><b><Link to="/SignUp" className='sig'>Sign up</Link></b></p>
+                  )}
+                  <label>&#x1F4E7;&nbsp; Your email</label>
+                </div>
+                <div className="form-floating my-3">
+                  <input type="password" placeholder="Your password" className={Formik.errors.password && Formik.touched.password ? "form-control is-invalid" : "form-control"} ref={password} maxLength={10} onChange={Formik.handleChange} style={{ backgroundColor: "#F5F7FA" }} name="password" onBlur={Formik.handleBlur} />
+                  <div id="toggle" ref={toggle} onClick={showHide} className="gose pe-4">
+                    <i ref={i} className="fa fa-eye" aria-hidden="true"></i>
+                  </div>
+                  {Formik.touched.password && (
+                    <div style={{ color: "red" }} className="py-2 ade">
+                      {Formik.errors.password}
+                    </div>
+                  )}
+                  <label>&#x1F512;&nbsp; Your password</label>
+                  <button type="submit" className="btn form-control py-3 mt-4 text-white" style={{ background: '#210F60', border: 'none' }}>
+                    <b>Sign-In</b>
+                    {loader && (
+                      <div className="spin">
+                        <div className="loader"></div>
+                      </div>
+                    )}
+                  </button>
+                </div>
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="row">
+                      <div className="col-8">
+                        <p style={{ opacity: '0.6' }}>Don't have an account?</p>
+                      </div>
+                      <div className="col-4">
+                        <p><b><Link to="/SignUp" className='sig'>Sign up</Link></b></p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </form>
             </div>
             <div className="col-12 col-md-6" style={{ background: '#BA7A30' }}>
               <div className="container">
@@ -149,4 +214,4 @@ const AboutDe = () => {
   )
 }
 
-export default AboutDe
+export default SignIn

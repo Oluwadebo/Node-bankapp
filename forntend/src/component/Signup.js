@@ -12,17 +12,10 @@ import opalogo from './assets/pic/logo-light.png'
 import download from './assets/pic/download.png'
 import svgexport1 from './assets/pic/svgexport-1.png'
 
-const AboutDe = () => {
+const Signup = () => {
   const [Error, setError] = useState('')
+  const [loader, setloader] = useState(false)
   const navigate = useNavigate()
-  useEffect(() => {
-    if (localStorage.member) {
-      let detail = JSON.parse(localStorage.member)
-      setallUser(detail)
-    } else {
-      setallUser([])
-    }
-  }, [])
 
   let date = new Date().getDate();
   let month = new Date().getMonth();
@@ -52,43 +45,36 @@ const AboutDe = () => {
   let mySpa = {
     color: '#1FC69D'
   }
-  const signup = useFormik({
+  let lower = new RegExp(`(?=.*[a-z])`);
+  let upper = new RegExp(`(?=.*[A-Z])`);
+  let number = new RegExp(`(?=.*[0-9])`);
+  const Formik = useFormik({
     initialValues: {
       Name: "",
       email: "",
       password: "",
+      phoneno: "",
     },
     onSubmit: (values) => {
       setloader(prev => true)
-      axios.post(`${baseUrl}customersignup`, values).then((credentials) => {
+      axios.post(`${baseUrl}signup`, values).then((credentials) => {
         if (credentials) {
           let Err = credentials.data.message;
           if (Err == "Email already used") {
             setloader(prev => false)
             setError("Email already used");
           } else {
+            navigate('/SignIn')
             setloader(prev => false)
-            setfirst(prev => true)
           }
         }
       })
     },
     validationSchema: yup.object({
-      Name: yup
-        .string()
-        .required("This field is required")
-        .min(3, "must be greater than three"),
-      email: yup
-        .string()
-        .required("This field is required")
-        .email("must be a valid email"),
-      password: yup
-        .string()
-        .required("This field is required")
-        .matches(lower, "Must include lowerCase letter")
-        .matches(upper, "Must include upperCase letter")
-        .matches(number, "Must include a number")
-        .min(5, "must be greater than 5 charaters"),
+      Name: yup.string().required("This field is required").min(3, "must be greater than three"),
+      email: yup.string().required("This field is required").email("must be a valid email"),
+      phoneno: yup.string().required("This field is required").min(11, "must be greater than ten"),
+      password: yup.string().required("This field is required").matches(lower, "Must include lowerCase letter").matches(upper, "Must include upperCase letter").matches(number, "Must include a number").min(5, "must be greater than 5 charaters"),
     }),
   });
   const toggle = useRef();
@@ -155,94 +141,47 @@ const AboutDe = () => {
             <div className="col-12 col-md-6 rig">
               <img src={opalogo} alt="" className='img-fluid mx-auto mt-5' />
               <h5><b>Create an account for your business.</b></h5>
-              <div className='form-floating'>
-                <input type="text" placeholder='Your firstname' className='form-control' onChange={(e) => setfirstname(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
-                <label>&#x1F464;&nbsp; Your firstname</label>
-              </div>
-              <div className='form-floating mt-2'>
-                <input type="text" placeholder='Your Lastname' className='form-control' onChange={(e) => setLastname(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
-                <label>&#x1F464;&nbsp; Your Lastname</label>
-              </div>
-              <div className='form-floating mt-2'>
-                <input type="email" placeholder='Your email' className='form-control' onChange={(e) => setemail(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
-                <label>&#x1F4E7;&nbsp; Your email</label>
-              </div>
-              <div className='form-floating mt-2'>
-                <input type="number" placeholder='Your phone number' className='form-control' onChange={(e) => setnumber(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
-                <label>&#x1F4DE;&nbsp; Your phone number</label>
-              </div>
-              <div className='form-floating mt-2'>
-                <input type="password" placeholder='Your password' maxLength={10} className='form-control' onChange={(e) => setpassword(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
-                <label>&#x1F512;&nbsp; Your password</label>
-                <button onClick={signup} className='btn form-control py-3 mt-3' style={{ background: '#1FC69D', border: 'none' }}>Create account</button>
-              </div>
-              <div className='row mt-2'>
-                <div className="col-md-12">
-                  <div className="row">
-                    <div className="col-8">
-                      <p style={{ opacity: '0.6' }}>Do have an account?</p>
-                    </div>
-                    <div className="col-4">
-                      <p><b><Link to="/SignIn" className='sig'>Sign In</Link></b></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <form action="" onSubmit={signup.handleSubmit}>
-                <div className="form-floating my-3">
-                  <input type="text" placeholder="Your Name" className={signup.errors.Name && signup.touched.Name ? "form-control is-invalid" : "form-control"} onChange={signup.handleChange} style={{ backgroundColor: "#F5F7FA" }} name="Name" onBlur={signup.handleBlur} />
-                  {signup.touched.Name && (
-                    <div style={{ color: "red" }} className="my-2">
-                      {signup.errors.Name}
+              <form action="" onSubmit={Formik.handleSubmit}>
+                <div className="form-floating mt-3 mb-4">
+                  <input type="text" placeholder="Your FullName" className={Formik.errors.Name && Formik.touched.Name ? "form-control is-invalid" : "form-control"} onChange={Formik.handleChange} style={{ backgroundColor: "#F5F7FA" }} name="Name" onBlur={Formik.handleBlur} />
+                  {Formik.touched.Name && (
+                    <div style={{ color: "red" }} className="ade">
+                      {Formik.errors.Name}
                     </div>
                   )}
-                  <label>&#x1F464;&nbsp; Your Name</label>
+                  <label>&#x1F464;&nbsp; Your FullName</label>
                 </div>
-                <div className="form-floating my-3">
-                  <input type="email" placeholder="Your email" className={signup.errors.email && signup.touched.email ? "form-control is-invalid" : "form-control"} onChange={signup.handleChange} style={{ backgroundColor: "#F5F7FA" }} name="email" onBlur={signup.handleBlur} />
-                  {signup.touched.email && (
-                    <div style={{ color: "red" }} className="my-2">
-                      {signup.errors.email}
+                <div className="form-floating mt-3 mb-4">
+                  <input type="email" placeholder="Your email" className={Formik.errors.email && Formik.touched.email ? "form-control is-invalid" : "form-control"} onChange={Formik.handleChange} style={{ backgroundColor: "#F5F7FA" }} name="email" onBlur={Formik.handleBlur} />
+                  {Formik.touched.email && (
+                    <div style={{ color: "red" }} className="ade">
+                      {Formik.errors.email}
                     </div>
                   )}
                   <label>&#x1F4E7;&nbsp; Your email</label>
                 </div>
+                <div className="form-floating mt-3 mb-4">
+                  <input type="number" placeholder="Your phone-number" className={Formik.errors.phoneno && Formik.touched.phoneno ? "form-control is-invalid" : "form-control"} onChange={Formik.handleChange} style={{ backgroundColor: "#F5F7FA" }} name="phoneno" onBlur={Formik.handleBlur} />
+                  {Formik.touched.phoneno && (
+                    <div style={{ color: "red" }} className="ade">
+                      {Formik.errors.phoneno}
+                    </div>
+                  )}
+                  <label>&#x1F464;&nbsp; Your phone-number</label>
+                </div>
                 <div className="form-floating my-3">
-                  <input
-                    type="password"
-                    placeholder="Your password"
-                    className={
-                      signup.errors.password && signup.touched.password
-                        ? "form-control is-invalid"
-                        : "form-control"
-                    }
-                    ref={password}
-                    maxLength={10}
-                    onChange={signup.handleChange}
-                    style={{ backgroundColor: "#F5F7FA" }}
-                    name="password"
-                    onBlur={signup.handleBlur}
-                  />
-
-                  <div
-                    id="toggle"
-                    ref={toggle}
-                    onClick={showHide}
-                    className="gose pe-4"
-                  >
+                  <input type="password" placeholder="Your password" className={Formik.errors.password && Formik.touched.password ? "form-control is-invalid" : "form-control"} ref={password} maxLength={10} onChange={Formik.handleChange} style={{ backgroundColor: "#F5F7FA" }} name="password" onBlur={Formik.handleBlur} />
+                  <div id="toggle" ref={toggle} onClick={showHide} className="gose pe-4">
                     <i ref={i} className="fa fa-eye" aria-hidden="true"></i>
                   </div>
-                  {signup.touched.password && (
-                    <div style={{ color: "red" }} className="my-2">
-                      {signup.errors.password}
+                  {Formik.touched.password && (
+                    <div style={{ color: "red" }} className="py-2 ade">
+                      {Formik.errors.password}
                     </div>
                   )}
                   <label>&#x1F512;&nbsp; Your password</label>
-                  <button
-                    type="submit"
-                    className="btn form-control py-3 mt-3 asdb"
-                  >
-                    <b>Sign-Up</b>
+                  <button type="submit" className="btn form-control py-3 mt-2 text-white" style={{ background: '#210F60', border: 'none' }}>
+                    <b>Create account</b>
                     {loader && (
                       <div className="spin">
                         <div className="loader"></div>
@@ -250,18 +189,14 @@ const AboutDe = () => {
                     )}
                   </button>
                 </div>
-                <div className="row mt-3 text-white">
+                <div className='row mt-2'>
                   <div className="col-md-12">
                     <div className="row">
                       <div className="col-8">
-                        <p style={{ opacity: "0.9" }}>Already have an account?</p>
+                        <p style={{ opacity: '0.6' }}>Do have an account?</p>
                       </div>
                       <div className="col-4">
-                        <p>
-                          <b className="sig" onClick={login}>
-                            Sign-In
-                          </b>
-                        </p>
+                        <p><b><Link to="/SignIn" className='sig'>Sign In</Link></b></p>
                       </div>
                     </div>
                   </div>
@@ -299,4 +234,4 @@ const AboutDe = () => {
   )
 }
 
-export default AboutDe
+export default Signup
