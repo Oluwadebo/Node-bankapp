@@ -79,9 +79,8 @@ app.post("/getaddtocart", getaddtocart)
 app.post("/addtocart", addtocart)
 app.post("/removeaddtocart", removeaddtocart)
 
-const port = process.env.PORT || 5010
+const port = process.env.PORT || 5011
 
 app.listen(port, () => {
-    // sendmail(["adewoleadekulemercy@gmail.com","felixadegboyega2019@gmail.com","bakareoluwatobi22@gmail.com"])
     console.log("Server started");
 })
