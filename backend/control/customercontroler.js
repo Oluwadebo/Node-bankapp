@@ -11,7 +11,12 @@ const regist = (req, res) => {
     let useremail = req.body.email;
     CustomerModel.create(information, (err) => {
         if (err) {
-            res.send({ message: "Email already used", status: false })
+            console.log(err.message);
+            if (err == "") {
+                res.send({ message: "Email already used", status: false })
+            }else{
+                res.send({ message: "Phone-Number already used", status: false })
+            }
         } else {
             customermail(useremail)
             res.send({ message: "saved", status: true })

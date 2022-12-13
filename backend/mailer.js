@@ -17,7 +17,7 @@ const customermail = async (emails) => {
   let info = await transporter.sendMail({
     from: process.env.EMAIL,
     to: emails,
-    subject: "Anthony app ✔",
+    subject: "Opay Bank ✔",
     // text: "Hello world?",
     html: `<div
         style="
@@ -26,19 +26,16 @@ const customermail = async (emails) => {
           font-family: Courier New monospace;
           padding: 20px;
         ">
-        <h2 style="text-align: center">
-          THANKS FOR CREATING AN ACCOUNT WITH US.
-        </h2>
         <h3 style="text-align: center">
-          Welcome to our site. <br />
-          Your account was successfully created at <span>${date}</span>.
+          Dear ade. <br /> welcome to Opay Bank.<br />
+          Your new account number is 1234567890.<br />
+          Thanks for bank with us.
         </h3>
         <h4 style="text-align: center">
           Contact 09044796430 or Email: ogunweoluwadebo@gmail.com <br />
-          for WEB SITE DEVELOPMENT
+          for WEB APP DEVELOPMENT
         </h4>
       </div>`,
-
   });
 
   console.log(info);

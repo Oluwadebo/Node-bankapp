@@ -18,6 +18,17 @@ const CustomerSchema = new mongoose.Schema(
             unique: true,
         },
         password: String,
+        DateCreated: String,
+        balance: Number,
+        phoneno: {
+            type: String,
+            unique: true,
+        },
+        accountNumber: String,
+        bvn:{
+            type: String,
+            unique: true,
+        },
     }
 )
 CustomerSchema.pre("save", async function (next) {

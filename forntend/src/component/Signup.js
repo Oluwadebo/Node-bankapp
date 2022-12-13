@@ -17,12 +17,9 @@ const Signup = () => {
   const [loader, setloader] = useState(false)
   const navigate = useNavigate()
 
-  let date = new Date().getDate();
-  let month = new Date().getMonth();
-  let year = new Date().getFullYear();
+  let year = new Date().toLocaleDateString();
   let time = new Date().toLocaleTimeString();
-  let DateCreated = `${date}-${month}-${year}  ${time}`
-  let accountNumber = '00' + Math.floor(Math.random() * 100000000)
+  let DateCreated = `${year}  ${time}`
 
   // const signup = () => {
   //   if (firstname !== "" && number !== "" && email !== "" && password !== "") {
@@ -54,18 +51,23 @@ const Signup = () => {
       email: "",
       password: "",
       phoneno: "",
+      balance: 0,
     },
     onSubmit: (values) => {
       setloader(prev => true)
-      axios.post(`${baseUrl}signup`, values).then((credentials) => {
+      let userdata = { Name: values.Name, phoneno: values.phoneno, email: values.email, password: values.password, accountNumber: values.phoneno, DateCreated, bvn: `${values.phoneno}${Math.floor(Math.random() * 9)}`, balance: values.balance, }
+      axios.post(`${baseUrl}signup`, userdata).then((credentials) => {
         if (credentials) {
           let Err = credentials.data.message;
           if (Err == "Email already used") {
             setloader(prev => false)
             setError("Email already used");
-          } else {
-            navigate('/SignIn')
+          } else if (Err == "Phone-Number already used") {
             setloader(prev => false)
+            setError("Phone-Number already used");
+          } else {
+            setloader(prev => false)
+            navigate('/SignIn')
           }
         }
       })
@@ -73,7 +75,7 @@ const Signup = () => {
     validationSchema: yup.object({
       Name: yup.string().required("This field is required").min(3, "must be greater than three"),
       email: yup.string().required("This field is required").email("must be a valid email"),
-      phoneno: yup.string().required("This field is required").min(11, "must be greater than ten"),
+      phoneno: yup.string().required("This field is required").min(10, "must be greater than ten"),
       password: yup.string().required("This field is required").matches(lower, "Must include lowerCase letter").matches(upper, "Must include upperCase letter").matches(number, "Must include a number").min(5, "must be greater than 5 charaters"),
     }),
   });
@@ -180,7 +182,7 @@ const Signup = () => {
                     </div>
                   )}
                   <label>&#x1F512;&nbsp; Your password</label>
-                  <button type="submit" className="btn form-control py-3 mt-2 text-white" style={{ background: '#210F60', border: 'none' }}>
+                  <button type="submit" className="btn form-control py-3 mt-3 text-white" style={{ background: '#210F60', border: 'none' }}>
                     <b>Create account</b>
                     {loader && (
                       <div className="spin">
