@@ -52,10 +52,11 @@ const Signup = () => {
       password: "",
       phoneno: "",
       balance: 0,
+      history: "",
     },
     onSubmit: (values) => {
       setloader(prev => true)
-      let userdata = { Name: values.Name, phoneno: values.phoneno, email: values.email, password: values.password, accountNumber: values.phoneno, DateCreated, bvn: `${values.phoneno}${Math.floor(Math.random() * 9)}`, balance: values.balance, }
+      let userdata = { Name: values.Name, phoneno: values.phoneno, email: values.email, password: values.password, accountNumber: values.phoneno, DateCreated, bvn: `${values.phoneno}${Math.floor(Math.random() * 9)}`, balance: values.balance, history: values.history, }
       axios.post(`${baseUrl}signup`, userdata).then((credentials) => {
         if (credentials) {
           let Err = credentials.data.message;

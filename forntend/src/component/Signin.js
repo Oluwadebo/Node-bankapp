@@ -62,9 +62,9 @@ const SignIn = () => {
             setError("Invaild password");
           } else {
             if (Err == "Token generated") {
-              localStorage.customer = credentials.data.token
+              localStorage.bank = credentials.data.token
               setloader(prev => false)
-              // navigate("/")
+              navigate('/Dashboard')
             }
           }
         }

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { UploadModel, CustomerModel, AddtocartModel } = require('../model/model');
+const { UploadModel, BankModel, AddtocartModel } = require('../model/model');
 const cloudinary = require('cloudinary');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -9,24 +9,42 @@ require('dotenv').config()
 const regist = (req, res) => {
     const information = req.body;
     let useremail = req.body.email;
-    CustomerModel.create(information, (err) => {
+    let email = req.body.email;
+    let phoneno = req.body.phoneno;
+    BankModel.find({ email }, (err, result) => {
         if (err) {
             console.log(err.message);
-            if (err == "") {
-                res.send({ message: "Email already used", status: false })
-            }else{
-                res.send({ message: "Phone-Number already used", status: false })
-            }
         } else {
-            customermail(useremail)
-            res.send({ message: "saved", status: true })
+            if (!result) {
+                BankModel.find({ phoneno }, (err, result) => {
+                    if (err) {
+                        console.log(err.message);
+                    } else {
+                        if (!result) {
+                            BankModel.create(information, (err) => {
+                                if (err) {
+                                    console.log(err.message);
+                                } else {
+                                    customermail(useremail)
+                                    res.send({ message: "saved", status: true })
+                                }
+                            })
+                        } else {
+                            res.send({ message: "Phone-Number already used", status: false })
+                        }
+                    }
+                })
+            } else {
+                res.send({ message: "Email already used", status: false })
+            }
+
         }
     })
 }
 
 const login = (req, res) => {
     const { email, password } = req.body;
-    CustomerModel.findOne({ email }, async (err, message) => {
+    BankModel.findOne({ email }, async (err, message) => {
         if (err) {
             res.send(err)
             console.log(err);

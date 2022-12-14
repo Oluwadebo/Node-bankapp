@@ -10,7 +10,7 @@ const uploadSchema = new mongoose.Schema(
     }
 )
 
-const CustomerSchema = new mongoose.Schema(
+const BankSchema = new mongoose.Schema(
     {
         Name: String,
         email: {
@@ -25,13 +25,14 @@ const CustomerSchema = new mongoose.Schema(
             unique: true,
         },
         accountNumber: String,
-        bvn:{
+        history: Array,
+        bvn: {
             type: String,
             unique: true,
         },
     }
 )
-CustomerSchema.pre("save", async function (next) {
+BankSchema.pre("save", async function (next) {
     let { password, email } = this;
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(password, salt);
@@ -39,42 +40,8 @@ CustomerSchema.pre("save", async function (next) {
     this.email = email.toLowerCase();
     next();
 })
-
-const AdminSchema = new mongoose.Schema(
-    {
-        Name: String,
-        email: {
-            type: String,
-            unique: true,
-        },
-        gender: String,
-        password: String,
-    }
-)
-AdminSchema.pre("save", async function (next) {
-    let { password, email } = this;
-    const salt = await bcrypt.genSalt(10);
-    const hashed = await bcrypt.hash(password, salt);
-    this.password = hashed;
-    this.email = email.toLowerCase();
-    next();
-})
-
-const AddtocartSchema = new mongoose.Schema(
-    {
-        customerId: {
-            type: String,
-            require:true,
-        },
-        product: String,
-        price: String,
-        file: String,
-    }
-)
 
 const UploadModel = mongoose.model('files', uploadSchema)
-const CustomerModel = mongoose.model('Customer', CustomerSchema)
-const AdminModel = mongoose.model('Admin', AdminSchema)
-const AddtocartModel = mongoose.model('Addtocart', AddtocartSchema)
+const BankModel = mongoose.model('Customers', BankSchema)
 
-module.exports = { UploadModel, CustomerModel, AdminModel, AddtocartModel };
+module.exports = { UploadModel, BankModel };

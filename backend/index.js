@@ -63,6 +63,10 @@ io.on("connection", (socket) => {
     })
 })
 
+app.post("/signup", regist)
+app.post("/signin", login)
+app.get("/dashboard", display)
+
 app.post("/adminsignup", adminregist)
 app.post("/adminsignin", adminlogin)
 app.get("/Admin", admin)
@@ -70,9 +74,6 @@ app.post("/adminfiles", adminfiles)
 app.post("/admindel", delproduct)
 app.post("/files", file)
 
-app.get("/dashboard", display)
-app.post("/signin", login)
-app.post("/signup", regist)
 app.get("/goods", goods)
 app.post("/Viewproduct", Viewproduct)
 app.post("/getaddtocart", getaddtocart)
