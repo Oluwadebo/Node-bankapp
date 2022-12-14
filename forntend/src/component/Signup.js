@@ -174,7 +174,7 @@ const Signup = () => {
                 </div>
                 <div className="form-floating my-3">
                   <input type="password" placeholder="Your password" className={Formik.errors.password && Formik.touched.password ? "form-control is-invalid" : "form-control"} ref={password} maxLength={10} onChange={Formik.handleChange} style={{ backgroundColor: "#F5F7FA" }} name="password" onBlur={Formik.handleBlur} />
-                  <div id="toggle" ref={toggle} onClick={showHide} className="gose pe-4">
+                  <div id="toggle" ref={toggle} onClick={showHide} className="goses pe-4">
                     <i ref={i} className="fa fa-eye" aria-hidden="true"></i>
                   </div>
                   {Formik.touched.password && (

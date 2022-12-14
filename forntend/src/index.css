@@ -182,11 +182,11 @@ code {
     transform: translateY(-3px);
   }
 }
-.gose {
+.goses {
   float: right;
-  animation: mover 2s infinite alternate;
+  animation: move 2s infinite alternate;
 }
-@keyframes mover {
+@keyframes move {
   0% {
     transform: translateY(-40px);
   }
