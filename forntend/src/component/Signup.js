@@ -60,12 +60,13 @@ const Signup = () => {
       axios.post(`${baseUrl}signup`, userdata).then((credentials) => {
         if (credentials) {
           let Err = credentials.data.message;
+          console.log(Err);
           if (Err == "Email already used") {
             setloader(prev => false)
-            setError("Email already used");
+            setError("Email is used");
           } else if (Err == "Phone-Number already used") {
             setloader(prev => false)
-            setError("Phone-Number already used");
+            setError("Phone-Number is used");
           } else {
             setloader(prev => false)
             navigate('/SignIn')
