@@ -13,10 +13,7 @@ const uploadSchema = new mongoose.Schema(
 const BankSchema = new mongoose.Schema(
     {
         Name: String,
-        email: {
-            type: String,
-            unique: true,
-        },
+        email: String,
         password: String,
         DateCreated: String,
         balance: Number,

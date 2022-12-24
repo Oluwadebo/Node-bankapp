@@ -21,21 +21,6 @@ const Signup = () => {
   let time = new Date().toLocaleTimeString();
   let DateCreated = `${year}  ${time}`
 
-  // const signup = () => {
-  //   if (firstname !== "" && number !== "" && email !== "" && password !== "") {
-  //     let accountBalance = Math.floor(Math.random() * 10000)
-  //     let User = { firstname, Lastname, email, number, password, accountNumber, DateCreated, history, accountBalance }
-  //     setallUser(() => {
-  //       let Customer = [...allUser, User]
-  //       localStorage.member = JSON.stringify(Customer)
-  //       navigate('/SignIn')
-  //       return Customer
-  //     })
-  //   } else {
-  //     let err = "Please fill all your input outlet"
-  //     setError(err)
-  //   }
-  // }
   let myStyle = {
     fontSize: '20px',
   }

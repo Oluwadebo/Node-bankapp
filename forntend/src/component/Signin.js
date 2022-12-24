@@ -16,25 +16,6 @@ const SignIn = () => {
   const [Error, setError] = useState('')
   const [loader, setloader] = useState(false)
   const navigate = useNavigate()
-  // const signin = () => {
-  //   let debo = JSON.parse(localStorage.getItem("member"))
-  //   if (email !== "" && password !== "") {
-  //     for (const a of debo) {
-  //       let User = { email, password }
-  //       if (a["email"] === User.email && a["password"] === User.password) {
-  //         localStorage.signinEmail = JSON.stringify(email);
-  //         localStorage.users = JSON.stringify(a)
-  //         navigate('/Dashboard')
-  //       } else {
-  //         let err = "Please confirm you fill input outlet correctly"
-  //         setError(err)
-  //       }
-  //     }
-  //   } else {
-  //     let err = "Please fill all your input outlet"
-  //     setError(err)
-  //   }
-  // }
   let myStyle = {
     fontSize: '20px',
   }

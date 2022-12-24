@@ -10,17 +10,18 @@ const regist = (req, res) => {
     const information = req.body;
     let useremail = req.body.email;
     let email = req.body.email;
+    let accountNumber = req.body.accountNumber;
     let phoneno = req.body.phoneno;
-    BankModel.find({ email }, (err, result) => {
+    BankModel.find({ email }, (err, message) => {
         if (err) {
             console.log(err.message);
         } else {
-            if (!result) {
+            if (message == "") {
                 BankModel.find({ phoneno }, (err, result) => {
                     if (err) {
                         console.log(err.message);
                     } else {
-                        if (!result) {
+                        if (result == "") {
                             BankModel.create(information, (err) => {
                                 if (err) {
                                     console.log(err.message);
@@ -30,11 +31,13 @@ const regist = (req, res) => {
                                 }
                             })
                         } else {
+                            console.log(result);
                             res.send({ message: "Phone-Number already used", status: false })
                         }
                     }
                 })
             } else {
+                console.log(message);
                 res.send({ message: "Email already used", status: false })
             }
 
@@ -53,6 +56,7 @@ const login = (req, res) => {
                 res.send({ status: false, message: "Email not found" })
             }
             else {
+                console.log(message);
                 const validPassword = await bcrypt.compare(password, message.password);
                 if (validPassword) {
                     const token = jwt.sign({ _id: message._id }, process.env.JWT_SECRET, { expiresIn: "1h" })
@@ -72,7 +76,7 @@ const display = (req, res) => {
             res.send({ status: false, message: "Invalid Token" })
         } else {
             let id = decoded._id;
-            CustomerModel.find({ _id: id }, (err, result) => {
+            BankModel.find({ _id: id }, (err, result) => {
                 if (err) {
                     res.send(err);
                 } else {
