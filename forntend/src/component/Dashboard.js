@@ -15,6 +15,7 @@ import App from '../App'
 const Dashboard = (props) => {
     const navigate = useNavigate()
     const [customers, setcustomers] = useState([])
+    const [balance, setbalance] = useState([])
     const bank = localStorage.bank;
     const [allUser, setallUser] = useState([])
     const [currentuser, setcurrentuser] = useState('')
@@ -77,6 +78,27 @@ const Dashboard = (props) => {
         fontSize: '20px',
     }
     const add = () => {
+        if (account !== "" && amount !== "") {
+            axios.get(`${baseUrl}dashboard`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${bank}`,
+                        "Content-type": "application/json",
+                        "Accept": "application/json"
+                    }
+                }).then((data) => {
+                    if (data) {
+                        let Err = data.data.message;
+                        if (Err == "Valid Token") {
+                            setbalance(data.data.result[0].balance);
+                        } else {
+                            localStorage.removeItem('bank')
+                            localStorage.removeItem('customerId')
+                            navigate("/SignIn")
+                        }
+                    }
+                })
+        }
         let email = currentuserdetails.email
         let hass = allUser.find((item, index) => item.email === email);
         let index = allUser.findIndex((x) => x.email == email)

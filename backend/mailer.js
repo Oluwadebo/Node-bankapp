@@ -1,6 +1,17 @@
 const nodemailer = require('nodemailer')
 let date = new Date().toLocaleString();
 
+let saccountNumber;
+let sName;
+
+const useraccountNumber = (accountNumber) => {
+  saccountNumber = accountNumber;
+}
+
+const userName = (Name) => {
+  sName = Name;
+}
+
 const customermail = async (emails) => {
 
   let transporter = nodemailer.createTransport({
@@ -16,7 +27,7 @@ const customermail = async (emails) => {
 
   let info = await transporter.sendMail({
     from: process.env.EMAIL,
-    to: emails.useremail,
+    to: emails,
     subject: "Opay Bank ✔",
     // text: "Hello world?",
     html: `<div
@@ -27,18 +38,17 @@ const customermail = async (emails) => {
           padding: 20px;
         ">
         <h3 style="text-align: center">
-          Dear ade. <br /> welcome to Opay Bank.<br />
-          Your new account number is ${emails.accountNumber}.<br />
+          Dear ${sName}. <br /> welcome to Opay Bank.<br />
+          Your account number is ${saccountNumber}.<br />
           Thanks for bank with us.
         </h3>
         <h4 style="text-align: center">
-          Contact 09044796430 or Email: ogunweoluwadebo@gmail.com <br />
-          for WEB APP DEVELOPMENT
+          Contact 09044796430 or Email: ogunweoluwadebo1@gmail.com <br />
+          for more enquires.
         </h4>
       </div>`,
   });
 
-  console.log(info);
 }
 
 const adminmail = async (emails) => {
@@ -84,4 +94,4 @@ const adminmail = async (emails) => {
   console.log(info);
 }
 
-module.exports = { customermail, adminmail }
+module.exports = { customermail, adminmail, useraccountNumber, userName }

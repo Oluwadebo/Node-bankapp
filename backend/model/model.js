@@ -1,15 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
-const uploadSchema = new mongoose.Schema(
-    {
-        product: String,
-        price: String,
-        file: String,
-        adminId: String,
-    }
-)
-
 const BankSchema = new mongoose.Schema(
     {
         Name: String,
@@ -22,7 +13,6 @@ const BankSchema = new mongoose.Schema(
             unique: true,
         },
         accountNumber: String,
-        history: Array,
         bvn: {
             type: String,
             unique: true,
@@ -38,7 +28,19 @@ BankSchema.pre("save", async function (next) {
     next();
 })
 
-const UploadModel = mongoose.model('files', uploadSchema)
-const BankModel = mongoose.model('Customers', BankSchema)
+const historySchema = new mongoose.Schema(
+    {
+        customerId: {
+            type: String,
+            require: true,
+        },
+        product: String,
+        price: String,
+        file: String,
+    }
+)
 
-module.exports = { UploadModel, BankModel };
+const BankModel = mongoose.model('Customers', BankSchema)
+const historyModel = mongoose.model('historys', historySchema)
+
+module.exports = { historyModel, BankModel };

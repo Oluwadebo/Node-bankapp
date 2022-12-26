@@ -3,7 +3,7 @@ const { UploadModel, BankModel, AddtocartModel } = require('../model/model');
 const cloudinary = require('cloudinary');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { customermail } = require('../mailer');
+const { customermail, useraccountNumber, userName } = require('../mailer');
 require('dotenv').config()
 
 const regist = (req, res) => {
@@ -12,6 +12,7 @@ const regist = (req, res) => {
     let email = req.body.email;
     let accountNumber = req.body.accountNumber;
     let phoneno = req.body.phoneno;
+    let Name = req.body.Name;
     BankModel.find({ email }, (err, message) => {
         if (err) {
             console.log(err.message);
@@ -26,6 +27,8 @@ const regist = (req, res) => {
                                 if (err) {
                                     console.log(err.message);
                                 } else {
+                                    userName(Name)
+                                    useraccountNumber(accountNumber)
                                     customermail(useremail)
                                     res.send({ message: "saved", status: true })
                                 }
