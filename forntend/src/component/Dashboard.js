@@ -93,7 +93,15 @@ const Dashboard = (props) => {
                             setbalance(data.data.result[0].balance);
                             let User = { account };
                             axios.post(`${baseUrl}account`, { account }).then((data) => {
-                                console.log(data);
+                                if (data) {
+                                    let Mes = data.data.message;
+                                    if (Mes == "account valid") {
+                                        console.log(data.data);
+                                    } else {
+                                        let Er = "Invalid account number"
+                                        setError(Er)
+                                    }
+                                }
                             })
                         } else {
                             localStorage.removeItem('bank')
@@ -204,15 +212,12 @@ const Dashboard = (props) => {
             <div className="mt-5">
                 <div className="container">
                     <div className="row pt-4">
-                        <div className="col-6 d-flex">
+                        <div className="col-8 col-md-11  d-flex">
                             <img src={imgavatar3} alt="" className='img-fluid rounded-circle me-2' width="40" height="40" />
                             <h5 className='pt-2'><b>{customers.Name}</b></h5>
                         </div>
-                        <div className="col-6">
-                            <div className="row">
-                                <div className="col-6"><h5 className='pt-2' style={{ float: 'right' }}>History</h5></div>
-                                <div className="col-6"><h5 className='pt-2' style={{ float: 'right' }}>{customers.history}</h5></div>
-                            </div>
+                        <div className="col-4 col-md-1">
+                            <h5 className='pt-2'>History</h5>
                         </div>
                     </div>
                     <div className="row my-3 p-3 shadow ad">

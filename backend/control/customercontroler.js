@@ -99,13 +99,17 @@ const goods = (req, res) => {
 
 const account = (req, res) => {
     let accountNumber = req.body.account;
-    console.log(req.body);
-    // UploadModel.find({ _id }, (err, result) => {
-    //     if (err) {
-    //     } else {
-    //         res.send({ result })
-    //     }
-    // })
+    BankModel.find({ accountNumber }, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            if (result == "") {
+                res.send({ message: "account invalid", status: false })
+            } else {
+                res.send({ message: "account valid", result, status: true })
+            }
+        }
+    })
 }
 
 const addtocart = (req, res) => {
