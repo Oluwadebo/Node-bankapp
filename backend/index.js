@@ -23,7 +23,7 @@ const { checker } = require("./middleware/middleware");
 const { users, adduser } = require("./store");
 const { sendmail } = require("./mailer");
 const { adminregist, adminlogin, admin, file, adminfiles, delproduct } = require("./control/admincontroler");
-const { display, login, regist, addtocart, goods, Viewproduct, getaddtocart, removeaddtocart } = require("./control/customercontroler");
+const { display, login, regist, addtocart, goods, account, getaddtocart, removeaddtocart } = require("./control/customercontroler");
 
 app.use(bodyParser.json({ limit: "50mb" }))
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }))
@@ -66,6 +66,7 @@ io.on("connection", (socket) => {
 app.post("/signup", regist)
 app.post("/signin", login)
 app.get("/dashboard", display)
+app.post("/account", account)
 
 app.post("/adminsignup", adminregist)
 app.post("/adminsignin", adminlogin)
@@ -75,7 +76,6 @@ app.post("/admindel", delproduct)
 app.post("/files", file)
 
 app.get("/goods", goods)
-app.post("/Viewproduct", Viewproduct)
 app.post("/getaddtocart", getaddtocart)
 app.post("/addtocart", addtocart)
 app.post("/removeaddtocart", removeaddtocart)

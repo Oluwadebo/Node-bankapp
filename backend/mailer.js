@@ -48,7 +48,6 @@ const customermail = async (emails) => {
         </h4>
       </div>`,
   });
-
 }
 
 const adminmail = async (emails) => {

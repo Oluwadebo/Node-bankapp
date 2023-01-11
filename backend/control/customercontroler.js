@@ -14,19 +14,13 @@ const regist = (req, res) => {
     let phoneno = req.body.phoneno;
     let Name = req.body.Name;
     BankModel.find({ email }, (err, message) => {
-        if (err) {
-            console.log(err.message);
-        } else {
+        if (err) { } else {
             if (message == "") {
                 BankModel.find({ phoneno }, (err, result) => {
-                    if (err) {
-                        console.log(err.message);
-                    } else {
+                    if (err) { } else {
                         if (result == "") {
                             BankModel.create(information, (err) => {
-                                if (err) {
-                                    console.log(err.message);
-                                } else {
+                                if (err) { } else {
                                     userName(Name)
                                     useraccountNumber(accountNumber)
                                     customermail(useremail)
@@ -34,13 +28,11 @@ const regist = (req, res) => {
                                 }
                             })
                         } else {
-                            console.log(result);
                             res.send({ message: "Phone-Number already used", status: false })
                         }
                     }
                 })
             } else {
-                console.log(message);
                 res.send({ message: "Email already used", status: false })
             }
 
@@ -53,13 +45,11 @@ const login = (req, res) => {
     BankModel.findOne({ email }, async (err, message) => {
         if (err) {
             res.send(err)
-            console.log(err);
         } else {
             if (!message) {
                 res.send({ status: false, message: "Email not found" })
             }
             else {
-                console.log(message);
                 const validPassword = await bcrypt.compare(password, message.password);
                 if (validPassword) {
                     const token = jwt.sign({ _id: message._id }, process.env.JWT_SECRET, { expiresIn: "1h" })
@@ -87,7 +77,7 @@ const display = (req, res) => {
                         res.send({ result, status: true, message: "Valid Token" })
                     }
                     else {
-                        console.log(result);
+                        // console.log(result);
                         res.send({ message: "empty array" })
                     }
                 }
@@ -107,14 +97,15 @@ const goods = (req, res) => {
     })
 }
 
-const Viewproduct = (req, res) => {
-    let _id = req.body.ViewproductId;
-    UploadModel.find({ _id }, (err, result) => {
-        if (err) {
-        } else {
-            res.send({ result })
-        }
-    })
+const account = (req, res) => {
+    let accountNumber = req.body.account;
+    console.log(req.body);
+    // UploadModel.find({ _id }, (err, result) => {
+    //     if (err) {
+    //     } else {
+    //         res.send({ result })
+    //     }
+    // })
 }
 
 const addtocart = (req, res) => {
@@ -156,4 +147,4 @@ const removeaddtocart = (req, res) => {
     })
 }
 
-module.exports = { display, login, regist, goods, addtocart, Viewproduct, getaddtocart, removeaddtocart };
+module.exports = { display, login, regist, goods, addtocart, account, getaddtocart, removeaddtocart };

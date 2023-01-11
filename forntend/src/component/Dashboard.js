@@ -56,8 +56,7 @@ const Dashboard = (props) => {
                         let Err = data.data.message;
                         if (Err == "Valid Token") {
                             setcustomers(data.data.result[0]);
-                            localStorage.customerId = data.data.result[0]._id
-                            // axios.post(`${baseUrl}addtocart`, { val, customerId })
+                            localStorage.customerId = data.data.result[0]._id;
                         } else {
                             localStorage.removeItem('bank')
                             localStorage.removeItem('customerId')
@@ -86,11 +85,16 @@ const Dashboard = (props) => {
                         "Content-type": "application/json",
                         "Accept": "application/json"
                     }
-                }).then((data) => {
+                })
+                .then((data) => {
                     if (data) {
                         let Err = data.data.message;
                         if (Err == "Valid Token") {
                             setbalance(data.data.result[0].balance);
+                            let User = { account };
+                            axios.post(`${baseUrl}account`, { account }).then((data) => {
+                                console.log(data);
+                            })
                         } else {
                             localStorage.removeItem('bank')
                             localStorage.removeItem('customerId')
@@ -98,23 +102,24 @@ const Dashboard = (props) => {
                         }
                     }
                 })
-        }
-        let email = currentuserdetails.email
-        let hass = allUser.find((item, index) => item.email === email);
-        let index = allUser.findIndex((x) => x.email == email)
-        let customer = allUser[index]
-        if (account !== "" && amount !== "") {
-            let User = { account, amount }
-            let remain = parseInt(allUser[index].accountBalance) + parseInt(amount);
-            setallUser(
-                allUser[index].accountBalance = remain
-            )
-            localStorage.setItem('member', JSON.stringify(allUser))
         } else {
             let err = "Please fill all your input outlet"
             setError(err)
         }
-        window.location.reload()
+        // let email = currentuserdetails.email
+        // let hass = allUser.find((item, index) => item.email === email);
+        // let index = allUser.findIndex((x) => x.email == email)
+        // let customer = allUser[index]
+        // if (account !== "" && amount !== "") {
+        //     let User = { account, amount }
+        //     let remain = parseInt(allUser[index].accountBalance) + parseInt(amount);
+        //     setallUser(
+        //         allUser[index].accountBalance = remain
+        //     )
+        //     localStorage.setItem('member', JSON.stringify(allUser))
+        // }
+
+        // window.location.reload()
     }
     const Confirm = () => {
         let email = currentuserdetails.email
