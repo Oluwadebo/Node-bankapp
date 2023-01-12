@@ -23,7 +23,7 @@ const { checker } = require("./middleware/middleware");
 const { users, adduser } = require("./store");
 const { sendmail } = require("./mailer");
 const { adminregist, adminlogin, admin, file, adminfiles, delproduct } = require("./control/admincontroler");
-const { display, login, regist, addtocart, goods, account, getaddtocart, removeaddtocart } = require("./control/customercontroler");
+const { display, login, regist, addtocart, goods, account, getaddtocart, removeaddtocart, transpin } = require("./control/customercontroler");
 
 app.use(bodyParser.json({ limit: "50mb" }))
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }))
@@ -67,6 +67,7 @@ app.post("/signup", regist)
 app.post("/signin", login)
 app.get("/dashboard", display)
 app.post("/account", account)
+app.post("/pin",transpin)
 
 app.post("/adminsignup", adminregist)
 app.post("/adminsignin", adminlogin)

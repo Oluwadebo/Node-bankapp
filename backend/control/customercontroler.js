@@ -112,6 +112,28 @@ const account = (req, res) => {
     })
 }
 
+const transpin = (req, res) => {
+    const { password } = req.body;
+    BankModel.findOne({ email }, async (err, message) => {
+        if (err) {
+            res.send(err)
+        } else {
+            if (!message) {
+                res.send({ status: false, message: "Email not found" })
+            }
+            else {
+                const validPassword = await bcrypt.compare(password, message.password);
+                if (validPassword) {
+                    const token = jwt.sign({ _id: message._id }, process.env.JWT_SECRET, { expiresIn: "1h" })
+                    res.send({ token, message: "Token generated", status: true });
+                } else {
+                    res.send({ status: false, message: "Invaild password" })
+                }
+            }
+        }
+    })
+}
+
 const addtocart = (req, res) => {
     let _id = req.body.val;
     let customerId = req.body.customerId;
@@ -151,4 +173,4 @@ const removeaddtocart = (req, res) => {
     })
 }
 
-module.exports = { display, login, regist, goods, addtocart, account, getaddtocart, removeaddtocart };
+module.exports = { display, login, regist, goods, addtocart, account, getaddtocart, removeaddtocart, transpin };

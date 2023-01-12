@@ -17,14 +17,18 @@ const Dashboard = (props) => {
     const [customers, setcustomers] = useState([])
     const [balance, setbalance] = useState([])
     const bank = localStorage.bank;
+    const [loader, setloader] = useState(false)
+    const [Name, setName] = useState("")
+    const [amount, setamount] = useState("")
+    const [account, setaccount] = useState("")
+
     const [allUser, setallUser] = useState([])
     const [currentuser, setcurrentuser] = useState('')
     const [currentuserdetails, setcurrentuserdetails] = useState({})
     const [customer, setcustomer] = useState({})
     const [User, setUser] = useState({})
     const [first, setfirst] = useState()
-    const [amount, setamount] = useState(0)
-    const [account, setaccount] = useState("")
+
     const [Decoder, setDecoder] = useState("")
     const [Error, setError] = useState('')
 
@@ -68,7 +72,6 @@ const Dashboard = (props) => {
             navigate("/SignIn")
         }
     }, [])
-
     const logout = () => {
         localStorage.removeItem("bank")
         navigate('/SignIn')
@@ -76,8 +79,41 @@ const Dashboard = (props) => {
     let myStyle = {
         fontSize: '20px',
     }
+    const seta = (e) => {
+        let account = e.target.value;
+        axios.post(`${baseUrl}account`, { account }).then((data) => {
+            if (data) {
+                let Mes = data.data.message;
+                if (Mes == "account valid") {
+                    setName(data.data.result[0].Name);
+                    setaccount(account)
+                    let Er = ""
+                    setError(Er)
+                } else {
+                    let Er = "Invalid account number"
+                    setError(Er)
+                }
+            }
+        })
+    }
+    const setam = (e) => {
+        let amou = e.target.value;
+        if (amou > 49) {
+            setamount(amou)
+            let Er = ""
+            setError(Er)
+        } else {
+            let Er = "minimum amount is #50"
+            setError(Er)
+        }
+    }
+    const setpin = (e) => {
+        let password = e.target.value;
+        axios.post(`${baseUrl}pin`, password)
+    }
     const add = () => {
         if (account !== "" && amount !== "") {
+            setloader(prev => true)
             axios.get(`${baseUrl}dashboard`,
                 {
                     headers: {
@@ -96,7 +132,10 @@ const Dashboard = (props) => {
                                 if (data) {
                                     let Mes = data.data.message;
                                     if (Mes == "account valid") {
-                                        console.log(data.data);
+                                        setName(data.data.result[0].Name);
+                                        setaccount(account)
+                                        let Er = ""
+                                        setError(Er)
                                     } else {
                                         let Er = "Invalid account number"
                                         setError(Er)
@@ -259,11 +298,16 @@ const Dashboard = (props) => {
                                                 <p><b className='text-danger'>{Error}</b></p>
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Recipient Account</label>
-                                                    <input type="number" className="form-control" placeholder='Recipient Account Number' onChange={(e) => setaccount(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                    <input type="number" className="form-control" placeholder='Recipient Account Number' onChange={(e) => seta(e)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                    <p className='pt-2'>{Name}</p>
                                                 </div>
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Amount</label>
-                                                    <input type="number" placeholder='Amount' className='form-control' onChange={(e) => setamount(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                    <input type="number" placeholder='Amount' className='form-control' onChange={(e) => setam(e)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                </div>
+                                                <div className="mb-3">
+                                                    <label for="recipient-name" className="col-form-label">transaction password</label>
+                                                    <input type="password" placeholder='Your password' className='form-control' onChange={(e) => setpin(e)} style={{ backgroundColor: '#F5F7FA' }} />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Your Balance</label>
@@ -272,8 +316,14 @@ const Dashboard = (props) => {
                                             </div>
                                         </div>
                                         <div className="modal-footer">
-                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close transaction</button>
-                                            <button type="button" className="btn btn-primary" onClick={add}>Confirm transaction</button>
+                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel transaction</button>
+                                            <button type="button" className="btn btn-primary" onClick={add}>Confirm transaction
+                                                {loader && (
+                                                    <div className="spin">
+                                                        <div className="loader"></div>
+                                                    </div>
+                                                )}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
