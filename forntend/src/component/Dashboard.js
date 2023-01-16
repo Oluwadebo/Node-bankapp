@@ -129,11 +129,32 @@ const Dashboard = (props) => {
                             setbalance(data.data.result[0].balance);
                             let User = { account };
                             axios.post(`${baseUrl}pin`, { pin, customerId }).then((data) => {
-                                console.log(data);
                                 if (data) {
                                     let vail = data.data.message;
                                     if (vail == "valid pin") {
-                                        setloader(prev => false)
+                                        axios.post(`${baseUrl}account`, { account }).then((data) => {
+                                            if (data) {
+                                                let Mes = data.data.message;
+                                                if (Mes == "account valid") {
+                                                    let id = data.data.result[0]._id;
+                                                    axios.post(`${baseUrl}editUser`, { id }).then((data) => {
+                                                        if (data) {
+                                                            let detail = data.data.result[0];
+                                                            let balan = parseInt(detail.balance) + parseInt(amount)
+                                                            let infor = { Name: detail.Name, phoneno: detail.phoneno, email: detail.email, password: detail.password, pin: detail.pin, accountNumber: detail.phoneno, DateCreated: detail.DateCreated, bvn: detail.bvn, balance: balan, _id: detail._id };
+                                                            console.log(infor);
+                                                            axios.post(`${baseUrl}update`, infor).then((data) => {
+                                                                if (data) {
+                                                                    setloader(prev => false)
+                                                                    window.location.reload()
+                                                                }
+                                                            })
+                                                        }
+
+                                                    })
+                                                }
+                                            }
+                                        })
                                     } else {
                                         setloader(prev => false)
                                         let Er = "Incorrect pin"
@@ -165,7 +186,6 @@ const Dashboard = (props) => {
         //     localStorage.setItem('member', JSON.stringify(allUser))
         // }
 
-        // window.location.reload()
     }
     const Confirm = () => {
         let email = currentuserdetails.email

@@ -132,6 +132,32 @@ const transpin = (req, res) => {
     })
 }
 
+const editUser = (req, res) => {
+    let id = req.body.id;
+    BankModel.find({ _id: id }, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log(result);
+            res.send({ result })
+        }
+    })
+}
+
+const update = (req, res) => {
+    let _id = req.body._id;
+    console.log(_id);
+    let updated = req.body;
+    BankModel.findByIdAndUpdate(_id, updated, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send({ result })
+        }
+    })
+
+}
+
 const addtocart = (req, res) => {
     let _id = req.body.val;
     let customerId = req.body.customerId;
@@ -171,4 +197,4 @@ const removeaddtocart = (req, res) => {
     })
 }
 
-module.exports = { display, login, regist, goods, addtocart, account, getaddtocart, removeaddtocart, transpin };
+module.exports = { display, login, regist, goods, addtocart, account, getaddtocart, removeaddtocart, transpin, editUser, update };
