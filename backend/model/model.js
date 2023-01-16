@@ -6,6 +6,7 @@ const BankSchema = new mongoose.Schema(
         Name: String,
         email: String,
         password: String,
+        pin: String,
         DateCreated: String,
         balance: Number,
         phoneno: {
@@ -20,10 +21,12 @@ const BankSchema = new mongoose.Schema(
     }
 )
 BankSchema.pre("save", async function (next) {
-    let { password, email } = this;
+    let { password, email, pin } = this;
     const salt = await bcrypt.genSalt(10);
     const hashed = await bcrypt.hash(password, salt);
     this.password = hashed;
+    const hased = await bcrypt.hash(pin, salt);
+    this.pin = hased;
     this.email = email.toLowerCase();
     next();
 })

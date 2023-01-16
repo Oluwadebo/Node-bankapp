@@ -17,10 +17,12 @@ const Dashboard = (props) => {
     const [customers, setcustomers] = useState([])
     const [balance, setbalance] = useState([])
     const bank = localStorage.bank;
+    const customerId = localStorage.customerId;
     const [loader, setloader] = useState(false)
     const [Name, setName] = useState("")
     const [amount, setamount] = useState("")
     const [account, setaccount] = useState("")
+    const [pin, setpin] = useState("")
 
     const [allUser, setallUser] = useState([])
     const [currentuser, setcurrentuser] = useState('')
@@ -107,12 +109,10 @@ const Dashboard = (props) => {
             setError(Er)
         }
     }
-    const setpin = (e) => {
-        let password = e.target.value;
-        axios.post(`${baseUrl}pin`, password)
-    }
     const add = () => {
         if (account !== "" && amount !== "") {
+            let Er = ""
+            setError(Er)
             setloader(prev => true)
             axios.get(`${baseUrl}dashboard`,
                 {
@@ -128,16 +128,15 @@ const Dashboard = (props) => {
                         if (Err == "Valid Token") {
                             setbalance(data.data.result[0].balance);
                             let User = { account };
-                            axios.post(`${baseUrl}account`, { account }).then((data) => {
+                            axios.post(`${baseUrl}pin`, { pin, customerId }).then((data) => {
+                                console.log(data);
                                 if (data) {
-                                    let Mes = data.data.message;
-                                    if (Mes == "account valid") {
-                                        setName(data.data.result[0].Name);
-                                        setaccount(account)
-                                        let Er = ""
-                                        setError(Er)
+                                    let vail = data.data.message;
+                                    if (vail == "valid pin") {
+                                        setloader(prev => false)
                                     } else {
-                                        let Er = "Invalid account number"
+                                        setloader(prev => false)
+                                        let Er = "Incorrect pin"
                                         setError(Er)
                                     }
                                 }
@@ -299,15 +298,15 @@ const Dashboard = (props) => {
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Recipient Account</label>
                                                     <input type="number" className="form-control" placeholder='Recipient Account Number' onChange={(e) => seta(e)} style={{ backgroundColor: '#F5F7FA' }} />
-                                                    <p className='pt-2'>{Name}</p>
+                                                    <p className='pt-2 ade'>{Name}</p>
                                                 </div>
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Amount</label>
                                                     <input type="number" placeholder='Amount' className='form-control' onChange={(e) => setam(e)} style={{ backgroundColor: '#F5F7FA' }} />
                                                 </div>
                                                 <div className="mb-3">
-                                                    <label for="recipient-name" className="col-form-label">transaction password</label>
-                                                    <input type="password" placeholder='Your password' className='form-control' onChange={(e) => setpin(e)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                    <label for="recipient-name" className="col-form-label">Transaction pin</label>
+                                                    <input type="password" maxLength={4} placeholder='Your transaction-pin' className='form-control' onChange={(e) => setpin(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Your Balance</label>

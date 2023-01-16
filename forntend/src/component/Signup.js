@@ -36,16 +36,16 @@ const Signup = () => {
       email: "",
       password: "",
       phoneno: "",
+      pin: "",
       balance: 0,
       history: "",
     },
     onSubmit: (values) => {
       setloader(prev => true)
-      let userdata = { Name: values.Name, phoneno: values.phoneno, email: values.email, password: values.password, accountNumber: values.phoneno, DateCreated, bvn: `${values.phoneno}${Math.floor(Math.random() * 9)}`, balance: values.balance, history: values.history, }
+      let userdata = { Name: values.Name, phoneno: values.phoneno, email: values.email, password: values.password, pin: values.pin, accountNumber: values.phoneno, DateCreated, bvn: `${values.phoneno}${Math.floor(Math.random() * 9)}`, balance: values.balance, history: values.history, }
       axios.post(`${baseUrl}signup`, userdata).then((credentials) => {
         if (credentials) {
           let Err = credentials.data.message;
-          console.log(Err);
           if (Err == "Email already used") {
             setloader(prev => false)
             setError("Email is used");
@@ -63,7 +63,8 @@ const Signup = () => {
       Name: yup.string().required("This field is required").min(3, "must be greater than three"),
       email: yup.string().required("This field is required").email("must be a valid email"),
       phoneno: yup.string().required("This field is required").min(10, "must be greater than ten"),
-      password: yup.string().required("This field is required").matches(lower, "Must include lowerCase letter").matches(upper, "Must include upperCase letter").matches(number, "Must include a number").min(5, "must be greater than 5 charaters"),
+      pin: yup.string().required("This field is required").min(4, "must be 4 character"),
+      password: yup.string().required("This field is required").matches(lower, "Must include lowerCase letter").matches(upper, "Must include upperCase letter").matches(number, "Must include a number").min(3, "must be between 3-5 charaters"),
     }),
   });
   const toggle = useRef();
@@ -128,7 +129,7 @@ const Signup = () => {
           <div className="row pt-md-5 pt-4">
             <p><b className='text-danger'>{Error}</b></p>
             <div className="col-12 col-md-6 rig">
-              <img src={opalogo} alt="" className='img-fluid mx-auto mt-5' />
+              <img src={opalogo} alt="" className='img-fluid mx-auto mt-2' />
               <h5><b>Create an account for your business.</b></h5>
               <form action="" onSubmit={Formik.handleSubmit}>
                 <div className="form-floating mt-3 mb-4">
@@ -164,11 +165,20 @@ const Signup = () => {
                     <i ref={i} className="fa fa-eye" aria-hidden="true"></i>
                   </div>
                   {Formik.touched.password && (
-                    <div style={{ color: "red" }} className="py-2 ade">
+                    <div style={{ color: "red" }} className="ade">
                       {Formik.errors.password}
                     </div>
                   )}
                   <label>&#x1F512;&nbsp; Your password</label>
+                </div>
+                <div className="form-floating mt-3 mb-4">
+                  <input type="password" placeholder="Your transaction-pin" className={Formik.errors.pin && Formik.touched.pin ? "form-control is-invalid" : "form-control"} maxLength={4} onChange={Formik.handleChange} style={{ backgroundColor: "#F5F7FA" }} name="pin" onBlur={Formik.handleBlur} />
+                  {Formik.touched.pin && (
+                    <div style={{ color: "red" }} className="pb-2 ade">
+                      {Formik.errors.pin}
+                    </div>
+                  )}
+                  <label>&nbsp;Your transaction-pin</label>
                   <button type="submit" className="btn form-control py-3 mt-3 text-white" style={{ background: '#210F60', border: 'none' }}>
                     <b>Create account</b>
                     {loader && (

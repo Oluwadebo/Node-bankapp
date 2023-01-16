@@ -113,21 +113,19 @@ const account = (req, res) => {
 }
 
 const transpin = (req, res) => {
-    const { password } = req.body;
-    BankModel.findOne({ email }, async (err, message) => {
+    const { pin, customerId } = req.body;
+    BankModel.findOne({ _id: customerId }, async (err, result) => {
         if (err) {
-            res.send(err)
+            console.log(err);
         } else {
-            if (!message) {
-                res.send({ status: false, message: "Email not found" })
-            }
-            else {
-                const validPassword = await bcrypt.compare(password, message.password);
-                if (validPassword) {
-                    const token = jwt.sign({ _id: message._id }, process.env.JWT_SECRET, { expiresIn: "1h" })
-                    res.send({ token, message: "Token generated", status: true });
+            if (result == "") {
+                res.send({ message: "invalid  customerId", status: false })
+            } else {
+                const validPin = await bcrypt.compare(pin, result.pin);
+                if (validPin) {
+                    res.send({ message: "valid pin", result, status: true })
                 } else {
-                    res.send({ status: false, message: "Invaild password" })
+                    res.send({ message: "invalid  pin", status: false })
                 }
             }
         }
