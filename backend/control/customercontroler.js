@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { UploadModel, BankModel, AddtocartModel } = require('../model/model');
+const { UploadModel, BankModel, historyModel, AddtocartModel } = require('../model/model');
 const cloudinary = require('cloudinary');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -132,21 +132,8 @@ const transpin = (req, res) => {
     })
 }
 
-const editUser = (req, res) => {
-    let id = req.body.id;
-    BankModel.find({ _id: id }, (err, result) => {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(result);
-            res.send({ result })
-        }
-    })
-}
-
 const update = (req, res) => {
     let _id = req.body._id;
-    console.log(_id);
     let updated = req.body;
     BankModel.findByIdAndUpdate(_id, updated, (err, result) => {
         if (err) {
@@ -156,6 +143,15 @@ const update = (req, res) => {
         }
     })
 
+}
+
+const history = (req, res) => {
+    let inform = req.body;
+    historyModel.create(inform, (err, result) => {
+        if (err) { } else {
+            res.send({ result })
+        }
+    })
 }
 
 const addtocart = (req, res) => {
@@ -197,4 +193,4 @@ const removeaddtocart = (req, res) => {
     })
 }
 
-module.exports = { display, login, regist, goods, addtocart, account, getaddtocart, removeaddtocart, transpin, editUser, update };
+module.exports = { display, login, regist, goods, addtocart, account, getaddtocart, removeaddtocart, transpin, update, history };

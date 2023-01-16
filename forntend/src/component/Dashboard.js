@@ -34,20 +34,6 @@ const Dashboard = (props) => {
     const [Decoder, setDecoder] = useState("")
     const [Error, setError] = useState('')
 
-    // useEffect(() => {
-    //     if (localStorage.member && localStorage.signinEmail && localStorage.users) {
-    //         let AllUser=JSON.parse(localStorage.member)
-    //         setallUser(JSON.parse(localStorage.member))  
-    //         setcurrentuser(JSON.parse(localStorage.signinEmail))  
-    //         setcurrentuserdetails(JSON.parse(localStorage.users))
-    //         let email =  JSON.parse(localStorage.users).email
-    //         let index=JSON.parse(localStorage.member).findIndex((x)=>x.email==email)
-    //         setcustomer(AllUser[index])
-    //     }else{
-    //         navigate('/SignIn')
-    //     }
-    // }, [])
-    // console.log(customer);
     useEffect(() => {
         if (bank) {
             axios.get(`${baseUrl}dashboard`,
@@ -137,20 +123,19 @@ const Dashboard = (props) => {
                                                 let Mes = data.data.message;
                                                 if (Mes == "account valid") {
                                                     let id = data.data.result[0]._id;
-                                                    axios.post(`${baseUrl}editUser`, { id }).then((data) => {
+                                                    let detail = data.data.result[0];
+                                                    let balan = parseInt(detail.balance) + parseInt(amount)
+                                                    let infor = { Name: detail.Name, phoneno: detail.phoneno, email: detail.email, password: detail.password, pin: detail.pin, accountNumber: detail.phoneno, DateCreated: detail.DateCreated, bvn: detail.bvn, balance: balan, _id: detail._id };
+                                                    axios.post(`${baseUrl}update`, infor).then((data) => {
                                                         if (data) {
-                                                            let detail = data.data.result[0];
-                                                            let balan = parseInt(detail.balance) + parseInt(amount)
-                                                            let infor = { Name: detail.Name, phoneno: detail.phoneno, email: detail.email, password: detail.password, pin: detail.pin, accountNumber: detail.phoneno, DateCreated: detail.DateCreated, bvn: detail.bvn, balance: balan, _id: detail._id };
-                                                            console.log(infor);
-                                                            axios.post(`${baseUrl}update`, infor).then((data) => {
+                                                            let his = { customerId, Name: detail.Name, accountNumber: detail.phoneno, email: detail.email, Bbalance: detail.balance, added: amount, Tbalance: balan, }
+                                                            axios.post(`${baseUrl}history`, his).then((data) => {
                                                                 if (data) {
                                                                     setloader(prev => false)
                                                                     window.location.reload()
                                                                 }
                                                             })
                                                         }
-
                                                     })
                                                 }
                                             }
@@ -173,19 +158,6 @@ const Dashboard = (props) => {
             let err = "Please fill all your input outlet"
             setError(err)
         }
-        // let email = currentuserdetails.email
-        // let hass = allUser.find((item, index) => item.email === email);
-        // let index = allUser.findIndex((x) => x.email == email)
-        // let customer = allUser[index]
-        // if (account !== "" && amount !== "") {
-        //     let User = { account, amount }
-        //     let remain = parseInt(allUser[index].accountBalance) + parseInt(amount);
-        //     setallUser(
-        //         allUser[index].accountBalance = remain
-        //     )
-        //     localStorage.setItem('member', JSON.stringify(allUser))
-        // }
-
     }
     const Confirm = () => {
         let email = currentuserdetails.email

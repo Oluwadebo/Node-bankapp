@@ -37,9 +37,12 @@ const historySchema = new mongoose.Schema(
             type: String,
             require: true,
         },
-        product: String,
-        price: String,
-        file: String,
+        Name: String,
+        email: String,
+        Bbalance: Number,
+        Tbalance: Number,
+        added: Number,
+        accountNumber: String,
     }
 )
 
