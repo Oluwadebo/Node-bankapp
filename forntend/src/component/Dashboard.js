@@ -23,6 +23,9 @@ const Dashboard = (props) => {
     const [amount, setamount] = useState("")
     const [account, setaccount] = useState("")
     const [pin, setpin] = useState("")
+    let year = new Date().toLocaleDateString();
+    let time = new Date().toLocaleTimeString();
+    let transactiontime = `${year}  ${time}`
 
     const [allUser, setallUser] = useState([])
     const [currentuser, setcurrentuser] = useState('')
@@ -128,7 +131,7 @@ const Dashboard = (props) => {
                                                     let infor = { Name: detail.Name, phoneno: detail.phoneno, email: detail.email, password: detail.password, pin: detail.pin, accountNumber: detail.phoneno, DateCreated: detail.DateCreated, bvn: detail.bvn, balance: balan, _id: detail._id };
                                                     axios.post(`${baseUrl}update`, infor).then((data) => {
                                                         if (data) {
-                                                            let his = { customerId, Name: detail.Name, accountNumber: detail.phoneno, email: detail.email, Bbalance: detail.balance, added: amount, Tbalance: balan, }
+                                                            let his = { customerId, Name: detail.Name, accountNumber: detail.phoneno, email: detail.email, Bbalance: detail.balance, added: amount, Tbalance: balan, transactiontime: transactiontime }
                                                             axios.post(`${baseUrl}history`, his).then((data) => {
                                                                 if (data) {
                                                                     setloader(prev => false)

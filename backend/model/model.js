@@ -43,6 +43,7 @@ const historySchema = new mongoose.Schema(
         Tbalance: Number,
         added: Number,
         accountNumber: String,
+        transactiontime: String
     }
 )
 
