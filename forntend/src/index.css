@@ -7,7 +7,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   transition: 0.5s;
 }
-
 code {
   font-family: source-code-pro, "Menlo", Monaco, Consolas, "Courier New",
     monospace;
@@ -78,7 +77,6 @@ code {
     transform: translateY(20px);
   }
 }
-
 @media only screen and (max-width: 600px) {
   .myStyle {
     font-size: 30px;
@@ -97,7 +95,6 @@ code {
     padding-right: 5%;
   }
 }
-
 @media all and (min-width: 992px) {
   .navbar .nav-item .dropdown-menu {
     display: block;
@@ -193,4 +190,14 @@ code {
   100% {
     transform: translateY(-40px);
   }
+}
+.tet {
+  color: black;
+  text-decoration: none;
+}
+.tet:hover {
+  color: black;
+}
+.alig {
+  text-align: center;
 }

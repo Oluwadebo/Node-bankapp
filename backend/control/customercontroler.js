@@ -154,6 +154,21 @@ const history = (req, res) => {
     })
 }
 
+const gethistory = (req, res) => {
+    let customerId = req.body.customerId
+    historyModel.find({ customerId }, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            if (result == "") {
+                res.send({ status: false, message: "No history yet" })
+            }else{
+                res.send({ result, status: true, message: "history seen" })
+            }
+        }
+    })
+}
+
 const addtocart = (req, res) => {
     let _id = req.body.val;
     let customerId = req.body.customerId;
@@ -193,4 +208,4 @@ const removeaddtocart = (req, res) => {
     })
 }
 
-module.exports = { display, login, regist, goods, addtocart, account, getaddtocart, removeaddtocart, transpin, update, history };
+module.exports = { display, login, regist, goods, addtocart, account, getaddtocart, removeaddtocart, transpin, update, history, gethistory };

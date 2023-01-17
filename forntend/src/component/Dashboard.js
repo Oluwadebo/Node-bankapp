@@ -10,7 +10,7 @@ import Withdrawal from './assets/pic/Withdrawal.png'
 import Otransfer from './assets/pic/Otransfer.png'
 import paybill from './assets/pic/paybill.png'
 import Addmoneytobalance from './assets/pic/Addmoneytobalance.png'
-import App from '../App'
+// import App from '../App'
 
 const Dashboard = (props) => {
     const navigate = useNavigate()
@@ -250,7 +250,7 @@ const Dashboard = (props) => {
                             <h5 className='pt-2'><b>{customers.Name}</b></h5>
                         </div>
                         <div className="col-4 col-md-1">
-                            <h5 className='pt-2'>History</h5>
+                            <Link to="/History" className='tet'><h5 className='pt-2'>History</h5></Link>
                         </div>
                     </div>
                     <div className="row my-3 p-3 shadow ad">

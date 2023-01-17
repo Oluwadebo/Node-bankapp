@@ -23,7 +23,7 @@ const { checker } = require("./middleware/middleware");
 const { users, adduser } = require("./store");
 const { sendmail } = require("./mailer");
 const { adminregist, adminlogin, admin, file, adminfiles, delproduct } = require("./control/admincontroler");
-const { display, login, regist, addtocart, goods, account, getaddtocart, removeaddtocart, transpin, update, history } = require("./control/customercontroler");
+const { display, login, regist, addtocart, goods, account, getaddtocart, removeaddtocart, transpin, update, history, gethistory } = require("./control/customercontroler");
 
 app.use(bodyParser.json({ limit: "50mb" }))
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }))
@@ -70,6 +70,7 @@ app.post("/account", account)
 app.post("/pin", transpin)
 app.post("/update", update)
 app.post("/history", history)
+app.post("/gethistory", gethistory)
 
 
 app.post("/adminsignup", adminregist)
