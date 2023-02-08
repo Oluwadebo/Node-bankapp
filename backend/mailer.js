@@ -12,7 +12,7 @@ const userName = (Name) => {
   sName = Name;
 }
 
-const customermail = async (emails) => {
+const signupmail = async (emails) => {
 
   let transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -39,8 +39,8 @@ const customermail = async (emails) => {
         ">
         <h3 style="text-align: center">
           Dear ${sName}. <br /> welcome to Opay Bank.<br />
-          Your account number is ${saccountNumber}.<br />
-          Thanks for bank with us.
+          Your account number is ${saccountNumber} created at ${date}.<br />
+          Thanks for banking with us.
         </h3>
         <h4 style="text-align: center">
           Contact 09044796430 or Email: ogunweoluwadebo1@gmail.com <br />
@@ -93,4 +93,4 @@ const adminmail = async (emails) => {
   console.log(info);
 }
 
-module.exports = { customermail, adminmail, useraccountNumber, userName }
+module.exports = { signupmail, adminmail, useraccountNumber, userName }

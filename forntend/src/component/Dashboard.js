@@ -15,7 +15,7 @@ import Addmoneytobalance from './assets/pic/Addmoneytobalance.png'
 const Dashboard = (props) => {
     const navigate = useNavigate()
     const [customers, setcustomers] = useState([])
-    const [balance, setbalance] = useState([])
+    const [accountNumber, setaccountNumber] = useState([])
     const bank = localStorage.bank;
     const customerId = localStorage.customerId;
     const [loader, setloader] = useState(false)
@@ -115,41 +115,45 @@ const Dashboard = (props) => {
                     if (data) {
                         let Err = data.data.message;
                         if (Err == "Valid Token") {
-                            setbalance(data.data.result[0].balance);
-                            let User = { account };
-                            axios.post(`${baseUrl}pin`, { pin, customerId }).then((data) => {
-                                if (data) {
-                                    let vail = data.data.message;
-                                    if (vail == "valid pin") {
-                                        axios.post(`${baseUrl}account`, { account }).then((data) => {
-                                            if (data) {
-                                                let Mes = data.data.message;
-                                                if (Mes == "account valid") {
-                                                    let id = data.data.result[0]._id;
-                                                    let detail = data.data.result[0];
-                                                    let balan = parseInt(detail.balance) + parseInt(amount)
-                                                    let infor = { Name: detail.Name, phoneno: detail.phoneno, email: detail.email, password: detail.password, pin: detail.pin, accountNumber: detail.phoneno, DateCreated: detail.DateCreated, bvn: detail.bvn, balance: balan, _id: detail._id };
-                                                    axios.post(`${baseUrl}update`, infor).then((data) => {
-                                                        if (data) {
-                                                            let his = { customerId, Name: detail.Name, accountNumber: detail.phoneno, email: detail.email, Bbalance: detail.balance, added: amount, Tbalance: balan, transactiontime: transactiontime }
-                                                            axios.post(`${baseUrl}history`, his).then((data) => {
-                                                                if (data) {
-                                                                    setloader(prev => false)
-                                                                    window.location.reload()
-                                                                }
-                                                            })
-                                                        }
-                                                    })
+                            setaccountNumber(data.data.result[0].accountNumber);
+                            if (data.data.result[0].accountNumber == account) {
+                                axios.post(`${baseUrl}pin`, { pin, customerId }).then((data) => {
+                                    if (data) {
+                                        let vail = data.data.message;
+                                        if (vail == "valid pin") {
+                                            axios.post(`${baseUrl}account`, { account }).then((data) => {
+                                                if (data) {
+                                                    let Mes = data.data.message;
+                                                    if (Mes == "account valid") {
+                                                        let id = data.data.result[0]._id;
+                                                        let detail = data.data.result[0];
+                                                        let balan = parseInt(detail.balance) + parseInt(amount)
+                                                        let infor = { Name: detail.Name, phoneno: detail.phoneno, email: detail.email, password: detail.password, pin: detail.pin, accountNumber: detail.phoneno, DateCreated: detail.DateCreated, bvn: detail.bvn, balance: balan, _id: detail._id };
+                                                        axios.post(`${baseUrl}update`, infor).then((data) => {
+                                                            if (data) {
+                                                                let his = { customerId, Name: detail.Name, accountNumber: detail.phoneno, email: detail.email, Bbalance: detail.balance, added: amount, Tbalance: balan, transactiontime: transactiontime }
+                                                                axios.post(`${baseUrl}history`, his).then((data) => {
+                                                                    if (data) {
+                                                                        setloader(prev => false)
+                                                                        window.location.reload()
+                                                                    }
+                                                                })
+                                                            }
+                                                        })
+                                                    }
                                                 }
-                                            }
-                                        })
-                                    } else {
-                                        setloader(prev => false)
-                                        let Er = "Incorrect pin"
-                                        setError(Er)
+                                            })
+                                        } else {
+                                            setloader(prev => false)
+                                            let Er = "Incorrect pin"
+                                            setError(Er)
+                                        }
                                     }
-                                }
-                            })
+                                })
+                            } else {
+                                let Er = "This is not your account number"
+                                setError(Er)
+                            }
                         } else {
                             localStorage.removeItem('bank')
                             localStorage.removeItem('customerId')

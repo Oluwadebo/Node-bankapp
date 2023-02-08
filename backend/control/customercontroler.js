@@ -3,7 +3,7 @@ const { UploadModel, BankModel, historyModel, AddtocartModel } = require('../mod
 const cloudinary = require('cloudinary');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { customermail, useraccountNumber, userName } = require('../mailer');
+const { signupmail, useraccountNumber, userName } = require('../mailer');
 require('dotenv').config()
 
 const regist = (req, res) => {
@@ -23,7 +23,7 @@ const regist = (req, res) => {
                                 if (err) { } else {
                                     userName(Name)
                                     useraccountNumber(accountNumber)
-                                    customermail(useremail)
+                                    signupmail(useremail)
                                     res.send({ message: "saved", status: true })
                                 }
                             })
