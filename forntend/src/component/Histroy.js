@@ -51,14 +51,6 @@ const Histroy = () => {
             navigate("/SignIn")
         }
     }, [])
-    useEffect(() => {
-        if (histo) {
-            if (histo.added) {
-
-            }
-            setfirst(prev => true)
-        }
-    }, [])
 
     const logout = () => {
         localStorage.removeItem("bank")
@@ -123,14 +115,9 @@ const Histroy = () => {
                                 <div className="col-6">
                                     <h4>{item.transactiontime}</h4>
                                 </div>
-                                <div>
-
-                                </div>
                                 <div className="col-6">
-                                    <h4 style={{ float: 'right', color: "green" }}>+ ₦{item.added}</h4>
-                                </div>
-                                <div className="col-6">
-                                    <h4 style={{ float: 'right', color: "red" }}>- ₦{item.transfer}</h4>
+                                    <h4 style={{ float: 'right', color: "red" }}>{item.transfer}</h4>
+                                    <h4 style={{ float: 'right', color: "green" }}>{item.added}</h4>
                                 </div>
                             </div>
                         </div>

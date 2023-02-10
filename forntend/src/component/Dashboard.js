@@ -52,6 +52,7 @@ const Dashboard = (props) => {
                         let Err = data.data.message;
                         if (Err == "Valid Token") {
                             setcustomers(data.data.result[0]);
+                            setbal(data.data.result[0].balance)
                             localStorage.customerId = data.data.result[0]._id;
                         } else {
                             localStorage.removeItem('bank')
@@ -99,6 +100,25 @@ const Dashboard = (props) => {
             setError(Er)
         }
     }
+
+    const setamo = (e) => {
+        let amou = e.target.value;
+        if (amou <= bal) {
+            if (amou > 49) {
+                setamount(amou)
+                let Er = ""
+                setError(Er)
+            } else {
+                let Er = "minimum amount is #50"
+                setError(Er)
+            }
+        } else {
+            setloader(prev => false)
+            let Er = "insufficient fund"
+            setError(Er)
+        }
+
+    }
     const add = () => {
         if (account !== "" && amount !== "") {
             let Er = ""
@@ -134,7 +154,8 @@ const Dashboard = (props) => {
                                                         let infor = { Name: detail.Name, phoneno: detail.phoneno, email: detail.email, password: detail.password, pin: detail.pin, accountNumber: detail.phoneno, DateCreated: detail.DateCreated, bvn: detail.bvn, balance: balan, _id: detail._id };
                                                         axios.post(`${baseUrl}update`, infor).then((data) => {
                                                             if (data) {
-                                                                let his = { customerId, Name: detail.Name, accountNumber: detail.phoneno, email: detail.email, Bbalance: detail.balance, added: amount, Tbalance: balan, transactiontime: transactiontime }
+                                                                let bes = "+ ₦";
+                                                                let his = { customerId, Name: detail.Name, accountNumber: detail.phoneno, email: detail.email, Bbalance: detail.balance, added: `${bes} ${amount}`, Tbalance: balan, transactiontime: transactiontime }
                                                                 axios.post(`${baseUrl}history`, his).then((data) => {
                                                                     if (data) {
                                                                         setloader(prev => false)
@@ -195,46 +216,39 @@ const Dashboard = (props) => {
                                     if (data) {
                                         let vail = data.data.message;
                                         if (vail == "valid pin") {
-                                            if (amount < bal) {
-                                                let Er = ""
-                                                setError(Er)
-                                                axios.post(`${baseUrl}account`, { account }).then((data) => {
-                                                    if (data) {
-                                                        let Mes = data.data.message;
-                                                        if (Mes == "account valid") {
-                                                            let id = data.data.result[0]._id;
-                                                            let detail = data.data.result[0];
-                                                            let balan = parseInt(detail.balance) + parseInt(amount)
-                                                            let infor = { Name: detail.Name, phoneno: detail.phoneno, email: detail.email, password: detail.password, pin: detail.pin, accountNumber: detail.phoneno, DateCreated: detail.DateCreated, bvn: detail.bvn, balance: balan, _id: detail._id };
-                                                            axios.post(`${baseUrl}update`, infor).then((data) => {
-                                                                if (data) {
-                                                                    let Upd = data.data.message;
-                                                                    if (Upd == "updated") {
-                                                                        let user = customers;
-                                                                        let userb = parseInt(user.balance) - parseInt(amount)
-                                                                        let uinfor = { Name: user.Name, phoneno: user.phoneno, email: user.email, password: user.password, pin: user.pin, accountNumber: user.phoneno, DateCreated: user.DateCreated, bvn: user.bvn, balance: userb, _id: user._id };
-                                                                        axios.post(`${baseUrl}update`, uinfor).then((data) => {
-                                                                            if (data) {
-                                                                                let his = { customerId, Name: user.Name, accountNumber: user.phoneno, email: user.email, Bbalance: user.balance, transfer: amount, Tbalance: userb, transactiontime: transactiontime }
-                                                                                axios.post(`${baseUrl}history`, his).then((data) => {
-                                                                                    if (data) {
-                                                                                        setloader(prev => false)
-                                                                                        window.location.reload()
-                                                                                    }
-                                                                                })
-                                                                            }
-                                                                        })
-                                                                    }
+                                            axios.post(`${baseUrl}account`, { account }).then((data) => {
+                                                if (data) {
+                                                    let Mes = data.data.message;
+                                                    if (Mes == "account valid") {
+                                                        let id = data.data.result[0]._id;
+                                                        let detail = data.data.result[0];
+                                                        let balan = parseInt(detail.balance) + parseInt(amount)
+                                                        let infor = { Name: detail.Name, phoneno: detail.phoneno, email: detail.email, password: detail.password, pin: detail.pin, accountNumber: detail.phoneno, DateCreated: detail.DateCreated, bvn: detail.bvn, balance: balan, _id: detail._id };
+                                                        axios.post(`${baseUrl}update`, infor).then((data) => {
+                                                            if (data) {
+                                                                let Upd = data.data.message;
+                                                                if (Upd == "updated") {
+                                                                    let user = customers;
+                                                                    let userb = parseInt(user.balance) - parseInt(amount)
+                                                                    let uinfor = { Name: user.Name, phoneno: user.phoneno, email: user.email, password: user.password, pin: user.pin, accountNumber: user.phoneno, DateCreated: user.DateCreated, bvn: user.bvn, balance: userb, _id: user._id };
+                                                                    axios.post(`${baseUrl}update`, uinfor).then((data) => {
+                                                                        if (data) {
+                                                                            let be = "- ₦";
+                                                                            let his = { customerId, Name: user.Name, accountNumber: user.phoneno, email: user.email, Bbalance: user.balance, transfer: `${be} ${amount}`, Tbalance: userb, transactiontime: transactiontime }
+                                                                            axios.post(`${baseUrl}history`, his).then((data) => {
+                                                                                if (data) {
+                                                                                    setloader(prev => false)
+                                                                                    window.location.reload()
+                                                                                }
+                                                                            })
+                                                                        }
+                                                                    })
                                                                 }
-                                                            })
-                                                        }
+                                                            }
+                                                        })
                                                     }
-                                                })
-                                            } else {
-                                                setloader(prev => false)
-                                                let Er = "insufficient fund"
-                                                setError(Er)
-                                            }
+                                                }
+                                            })
                                         } else {
                                             setloader(prev => false)
                                             let Er = "Incorrect pin"
@@ -247,7 +261,6 @@ const Dashboard = (props) => {
                                 let Er = "This is your account number, you can not transfer money to your account by your self, go to add money instead"
                                 setError(Er)
                             }
-
                         } else {
                             localStorage.removeItem('bank')
                             localStorage.removeItem('customerId')
@@ -423,7 +436,7 @@ const Dashboard = (props) => {
                                                 </div>
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Amount</label>
-                                                    <input type="number" placeholder='Amount' className='form-control' onChange={(e) => setam(e)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                    <input type="number" placeholder='Amount' className='form-control' onChange={(e) => setamo(e)} style={{ backgroundColor: '#F5F7FA' }} />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Transaction pin</label>

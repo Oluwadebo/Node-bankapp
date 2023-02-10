@@ -41,8 +41,8 @@ const historySchema = new mongoose.Schema(
         email: String,
         Bbalance: Number,
         Tbalance: Number,
-        added: Number,
-        transfer: Number,
+        added: String,
+        transfer: String,
         accountNumber: String,
         transactiontime: String
     }
