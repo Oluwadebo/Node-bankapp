@@ -23,6 +23,7 @@ const Dashboard = (props) => {
     const [amount, setamount] = useState("")
     const [account, setaccount] = useState("")
     const [pin, setpin] = useState("")
+    const [bal, setbal] = useState([])
     let year = new Date().toLocaleDateString();
     let time = new Date().toLocaleTimeString();
     let transactiontime = `${year}  ${time}`
@@ -117,6 +118,8 @@ const Dashboard = (props) => {
                         if (Err == "Valid Token") {
                             setaccountNumber(data.data.result[0].accountNumber);
                             if (data.data.result[0].accountNumber == account) {
+                                let Er = ""
+                                setError(Er)
                                 axios.post(`${baseUrl}pin`, { pin, customerId }).then((data) => {
                                     if (data) {
                                         let vail = data.data.message;
@@ -151,7 +154,8 @@ const Dashboard = (props) => {
                                     }
                                 })
                             } else {
-                                let Er = "This is not your account number"
+                                setloader(prev => false)
+                                let Er = "This is not your account number, you can only add money to your account do transfer instead"
                                 setError(Er)
                             }
                         } else {
@@ -166,20 +170,91 @@ const Dashboard = (props) => {
             setError(err)
         }
     }
-    const Confirm = () => {
-        let email = currentuserdetails.email
-        let hass = allUser.find((item, index) => item.email === email);
-        let index = allUser.findIndex((x) => x.email == email)
-        let customer = allUser[index]
+    const Transfer = () => {
         if (account !== "" && amount !== "") {
-            let User = { account, amount }
-            let remain = allUser[index].accountBalance - amount;
-            setallUser(
-                allUser[index].accountBalance = remain
-            )
-            console.log(allUser[index].accountBalance);
-            localStorage.setItem('member', JSON.stringify(allUser))
-            window.location.reload()
+            let Er = ""
+            setError(Er)
+            setloader(prev => true)
+            axios.get(`${baseUrl}dashboard`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${bank}`,
+                        "Content-type": "application/json",
+                        "Accept": "application/json"
+                    }
+                })
+                .then((data) => {
+                    if (data) {
+                        let Err = data.data.message;
+                        if (Err == "Valid Token") {
+                            setbal(data.data.result[0].balance)
+                            if (data.data.result[0].accountNumber != account) {
+                                let Er = ""
+                                setError(Er)
+                                axios.post(`${baseUrl}pin`, { pin, customerId }).then((data) => {
+                                    if (data) {
+                                        let vail = data.data.message;
+                                        if (vail == "valid pin") {
+                                            if (amount < bal) {
+                                                let Er = ""
+                                                setError(Er)
+                                                axios.post(`${baseUrl}account`, { account }).then((data) => {
+                                                    if (data) {
+                                                        let Mes = data.data.message;
+                                                        if (Mes == "account valid") {
+                                                            let id = data.data.result[0]._id;
+                                                            let detail = data.data.result[0];
+                                                            let balan = parseInt(detail.balance) + parseInt(amount)
+                                                            let infor = { Name: detail.Name, phoneno: detail.phoneno, email: detail.email, password: detail.password, pin: detail.pin, accountNumber: detail.phoneno, DateCreated: detail.DateCreated, bvn: detail.bvn, balance: balan, _id: detail._id };
+                                                            axios.post(`${baseUrl}update`, infor).then((data) => {
+                                                                if (data) {
+                                                                    let Upd = data.data.message;
+                                                                    if (Upd == "updated") {
+                                                                        let user = customers;
+                                                                        let userb = parseInt(user.balance) - parseInt(amount)
+                                                                        let uinfor = { Name: user.Name, phoneno: user.phoneno, email: user.email, password: user.password, pin: user.pin, accountNumber: user.phoneno, DateCreated: user.DateCreated, bvn: user.bvn, balance: userb, _id: user._id };
+                                                                        axios.post(`${baseUrl}update`, uinfor).then((data) => {
+                                                                            if (data) {
+                                                                                let his = { customerId, Name: user.Name, accountNumber: user.phoneno, email: user.email, Bbalance: user.balance, transfer: amount, Tbalance: userb, transactiontime: transactiontime }
+                                                                                axios.post(`${baseUrl}history`, his).then((data) => {
+                                                                                    if (data) {
+                                                                                        setloader(prev => false)
+                                                                                        window.location.reload()
+                                                                                    }
+                                                                                })
+                                                                            }
+                                                                        })
+                                                                    }
+                                                                }
+                                                            })
+                                                        }
+                                                    }
+                                                })
+                                            } else {
+                                                setloader(prev => false)
+                                                let Er = "insufficient fund"
+                                                setError(Er)
+                                            }
+                                        } else {
+                                            setloader(prev => false)
+                                            let Er = "Incorrect pin"
+                                            setError(Er)
+                                        }
+                                    }
+                                })
+                            } else {
+                                setloader(prev => false)
+                                let Er = "This is your account number, you can not transfer money to your account by your self, go to add money instead"
+                                setError(Er)
+                            }
+
+                        } else {
+                            localStorage.removeItem('bank')
+                            localStorage.removeItem('customerId')
+                            navigate("/SignIn")
+                        }
+                    }
+                })
         } else {
             let err = "Please fill all your input outlet"
             setError(err)
@@ -295,7 +370,7 @@ const Dashboard = (props) => {
                                             <div>
                                                 <p><b className='text-danger'>{Error}</b></p>
                                                 <div className="mb-3">
-                                                    <label for="recipient-name" className="col-form-label">Recipient Account</label>
+                                                    <label for="recipient-name" className="col-form-label">Your Account</label>
                                                     <input type="number" className="form-control" placeholder='Recipient Account Number' onChange={(e) => seta(e)} style={{ backgroundColor: '#F5F7FA' }} />
                                                     <p className='pt-2 ade'>{Name}</p>
                                                 </div>
@@ -328,11 +403,11 @@ const Dashboard = (props) => {
                             </div>
                         </div>
                         <div className="col-4 col-md-3 mx-4 mx-md-auto">
-                            <button type="button" className="btn asd" data-bs-toggle="modal" data-bs-target="#transfer">
+                            <button type="button" className="btn asd" data-bs-toggle="modal" data-bs-target="#Transfer">
                                 <img src={Otransfer} alt="" className='img-fluid rounded-circle me-2' width="60" height="60" />
                                 <h5 className='pt-2'>Transfer</h5>
                             </button>
-                            <div className="modal" id="transfer" data-bs-backdrop="static">
+                            <div className="modal" id="Transfer" data-bs-backdrop="static">
                                 <div className="modal-dialog">
                                     <div className="modal-content">
                                         <div className="modal-header">
@@ -343,11 +418,16 @@ const Dashboard = (props) => {
                                                 <p><b className='text-danger'>{Error}</b></p>
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Recipient Account</label>
-                                                    <input type="number" className="form-control" placeholder='Recipient Account Number' onChange={(e) => setaccount(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                    <input type="number" className="form-control" placeholder='Recipient Account Number' onChange={(e) => seta(e)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                    <p className='pt-2 ade'>{Name}</p>
                                                 </div>
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Amount</label>
-                                                    <input type="number" placeholder='Amount' className='form-control' onChange={(e) => setamount(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                    <input type="number" placeholder='Amount' className='form-control' onChange={(e) => setam(e)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                </div>
+                                                <div className="mb-3">
+                                                    <label for="recipient-name" className="col-form-label">Transaction pin</label>
+                                                    <input type="password" maxLength={4} placeholder='Your transaction-pin' className='form-control' onChange={(e) => setpin(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Your Balance</label>
@@ -356,8 +436,14 @@ const Dashboard = (props) => {
                                             </div>
                                         </div>
                                         <div className="modal-footer">
-                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close transaction</button>
-                                            <button type="button" className="btn btn-primary" onClick={Confirm}>Confirm transaction</button>
+                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel transaction</button>
+                                            <button type="button" className="btn btn-primary" onClick={Transfer}>confirm transaction
+                                                {loader && (
+                                                    <div className="spin">
+                                                        <div className="loader"></div>
+                                                    </div>
+                                                )}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

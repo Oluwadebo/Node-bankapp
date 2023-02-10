@@ -139,7 +139,7 @@ const update = (req, res) => {
         if (err) {
             console.log(err);
         } else {
-            res.send({ result })
+            res.send({ message: "updated", result })
         }
     })
 
@@ -162,7 +162,7 @@ const gethistory = (req, res) => {
         } else {
             if (result == "") {
                 res.send({ status: false, message: "No history yet" })
-            }else{
+            } else {
                 res.send({ result, status: true, message: "history seen" })
             }
         }
