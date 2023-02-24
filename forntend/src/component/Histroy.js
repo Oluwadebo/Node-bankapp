@@ -13,7 +13,6 @@ const Histroy = () => {
     const [customers, setcustomers] = useState({})
     const [histo, sethisto] = useState([])
     const [mess, setmess] = useState("")
-    const [first, setfirst] = useState(false)
 
     useEffect(() => {
         if (bank) {

@@ -29,12 +29,7 @@ const Dashboard = (props) => {
     let transactiontime = `${year}  ${time}`
 
     const [allUser, setallUser] = useState([])
-    const [currentuser, setcurrentuser] = useState('')
     const [currentuserdetails, setcurrentuserdetails] = useState({})
-    const [customer, setcustomer] = useState({})
-    const [User, setUser] = useState({})
-    const [first, setfirst] = useState()
-
     const [Decoder, setDecoder] = useState("")
     const [Error, setError] = useState('')
 
@@ -100,7 +95,6 @@ const Dashboard = (props) => {
             setError(Er)
         }
     }
-
     const setamo = (e) => {
         let amou = e.target.value;
         if (amou <= bal) {
@@ -477,16 +471,17 @@ const Dashboard = (props) => {
                                             <div>
                                                 <p><b className='text-danger'>{Error}</b></p>
                                                 <div className="mb-3">
-                                                    <label for="recipient-name" className="col-form-label">Decoder Name</label>
-                                                    <input type="text" className="form-control" placeholder='Example DSTV' onChange={(e) => setaccount(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
-                                                </div>
-                                                <div className="mb-3">
-                                                    <label for="recipient-name" className="col-form-label">Decoder Number</label>
-                                                    <input type="number" placeholder='Example 09897899788' className='form-control' onChange={(e) => setDecoder(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                    <label for="recipient-name" className="col-form-label">Recipient Account</label>
+                                                    <input type="number" className="form-control" placeholder='Recipient Account Number' onChange={(e) => seta(e)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                    <p className='pt-2 ade'>{Name}</p>
                                                 </div>
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Amount</label>
-                                                    <input type="number" placeholder='Amount' className='form-control' onChange={(e) => setamount(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                    <input type="number" placeholder='Amount' className='form-control' onChange={(e) => setamo(e)} style={{ backgroundColor: '#F5F7FA' }} />
+                                                </div>
+                                                <div className="mb-3">
+                                                    <label for="recipient-name" className="col-form-label">Transaction pin</label>
+                                                    <input type="password" maxLength={4} placeholder='Your transaction-pin' className='form-control' onChange={(e) => setpin(e.target.value)} style={{ backgroundColor: '#F5F7FA' }} />
                                                 </div>
                                                 <div className="mb-3">
                                                     <label for="recipient-name" className="col-form-label">Your Balance</label>
@@ -495,8 +490,14 @@ const Dashboard = (props) => {
                                             </div>
                                         </div>
                                         <div className="modal-footer">
-                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close transaction</button>
-                                            <button type="button" className="btn btn-primary" onClick={Recharge}>Confirm transaction</button>
+                                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel transaction</button>
+                                            <button type="button" className="btn btn-primary" onClick={Transfer}>confirm transaction
+                                                {loader && (
+                                                    <div className="spin">
+                                                        <div className="loader"></div>
+                                                    </div>
+                                                )}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

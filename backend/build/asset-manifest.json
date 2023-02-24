@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/static/css/main.57dba7ac.css",
+    "main.js": "/static/js/main.fb008870.js",
+    "static/js/787.5123e447.chunk.js": "/static/js/787.5123e447.chunk.js",
+    "static/media/fontawesome-webfont.svg?v=4.7.0": "/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
+    "static/media/updated-phone.png": "/static/media/updated-phone.b79599179ad797c0e49d.png",
+    "static/media/inquires.png": "/static/media/inquires.37beba0a0765191468f3.png",
+    "static/media/fontawesome-webfont.eot": "/static/media/fontawesome-webfont.8b43027f47b20503057d.eot",
+    "static/media/fontawesome-webfont.ttf?v=4.7.0": "/static/media/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
+    "static/media/fontawesome-webfont.woff?v=4.7.0": "/static/media/fontawesome-webfont.f691f37e57f04c152e23.woff",
+    "static/media/card-hand.png": "/static/media/card-hand.9daac7a52efd45b924ca.png",
+    "static/media/agent.jpg": "/static/media/agent.e050202ca5c4b212d31e.jpg",
+    "static/media/bills.png": "/static/media/bills.ff44ec0fb95210b3d18c.png",
+    "static/media/fontawesome-webfont.woff2?v=4.7.0": "/static/media/fontawesome-webfont.20fd1704ea223900efa9.woff2",
+    "static/media/card-phone-img.png": "/static/media/card-phone-img.2552dd6eae2bdc9badda.png",
+    "static/media/svgexport-13.png": "/static/media/svgexport-13.c9f916636133df43023e.png",
+    "static/media/logo.svg": "/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "index.html": "/index.html",
+    "main.57dba7ac.css.map": "/static/css/main.57dba7ac.css.map",
+    "main.fb008870.js.map": "/static/js/main.fb008870.js.map",
+    "787.5123e447.chunk.js.map": "/static/js/787.5123e447.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.57dba7ac.css",
+    "static/js/main.fb008870.js"
+  ]
+}
