@@ -142,7 +142,6 @@ const update = (req, res) => {
             res.send({ message: "updated", result })
         }
     })
-
 }
 
 const history = (req, res) => {
