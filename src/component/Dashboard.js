@@ -228,11 +228,17 @@ const Dashboard = (props) => {
                                                                     axios.post(`${baseUrl}update`, uinfor).then((data) => {
                                                                         if (data) {
                                                                             let be = "- ₦";
-                                                                            let his = { customerId, Name: user.Name, accountNumber: user.phoneno, email: user.email, Bbalance: user.balance, transfer: `${be} ${amount}`, Tbalance: userb, transactiontime: transactiontime }
+                                                                            let his = { customerId, Name: detail.Name, accountNumber: detail.phoneno, Bbalance: user.balance, transfer: `${be} ${amount}`, Tbalance: userb, transactiontime: transactiontime }
                                                                             axios.post(`${baseUrl}history`, his).then((data) => {
                                                                                 if (data) {
-                                                                                    setloader(prev => false)
-                                                                                    window.location.reload()
+                                                                                    let be = "+ ₦";
+                                                                                    let hisr = { receiverId: detail._id, Name: user.Name, accountNumber: user.phoneno, Bbalance: detail.balance, received: `${be} ${amount}`, Tbalance: balan, transactiontime: transactiontime };
+                                                                                    axios.post(`${baseUrl}history`, hisr).then((data) => {
+                                                                                        if (data) {
+                                                                                            setloader(prev => false)
+                                                                                            window.location.reload()
+                                                                                        }
+                                                                                    })
                                                                                 }
                                                                             })
                                                                         }

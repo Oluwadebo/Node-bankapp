@@ -32,7 +32,10 @@ const Histroy = () => {
                                 if (data) {
                                     let history = data.data.message;
                                     if (history == "history seen") {
-                                        sethisto(data.data.result);
+                                        let customerresult = data.data.results.customerresult;
+                                        let receiverresult = data.data.results.receiverresult;
+                                        const newobj = [...customerresult, ...receiverresult,]
+                                        sethisto(newobj);
                                     } else {
                                         let messa = data.data.message;
                                         setmess(messa)
@@ -117,6 +120,7 @@ const Histroy = () => {
                                 <div className="col-6">
                                     <h4 style={{ float: 'right', color: "red" }}>{item.transfer}</h4>
                                     <h4 style={{ float: 'right', color: "green" }}>{item.added}</h4>
+                                    <h4 style={{ float: 'right', color: "green" }}>{item.received}</h4>
                                 </div>
                             </div>
                         </div>
