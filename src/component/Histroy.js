@@ -33,12 +33,16 @@ const Histroy = () => {
                                     let history = data.data.message;
                                     if (history == "customerresult and receiverresult") {
                                         let customerre = data.data.results.customerresult;
-                                        let receiverre = data.data.result.receiverresult;
+                                        let receiverre = data.data.results.receiverresult;
                                         const newobj = [...customerre, ...receiverre]
                                         sethisto(newobj);
                                     } else if (history == "receiverId") {
                                         let receiverre = data.data.result;
                                         const newobj = [...receiverre,]
+                                        sethisto(newobj);
+                                    } else if (history == "customerresult") {
+                                        let customerre = data.data.customerresult;
+                                        const newobj = [...customerre,]
                                         sethisto(newobj);
                                     }
                                     else {
