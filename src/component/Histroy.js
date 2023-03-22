@@ -31,12 +31,17 @@ const Histroy = () => {
                             axios.post(`${baseUrl}gethistory`, { customerId }).then((data) => {
                                 if (data) {
                                     let history = data.data.message;
-                                    if (history == "history seen") {
-                                        let customerresult = data.data.results.customerresult;
-                                        let receiverresult = data.data.results.receiverresult;
-                                        const newobj = [...customerresult, ...receiverresult,]
+                                    if (history == "customerresult and receiverresult") {
+                                        let customerre = data.data.results.customerresult;
+                                        let receiverre = data.data.result.receiverresult;
+                                        const newobj = [...customerre, ...receiverre]
                                         sethisto(newobj);
-                                    } else {
+                                    } else if (history == "receiverId") {
+                                        let receiverre = data.data.result;
+                                        const newobj = [...receiverre,]
+                                        sethisto(newobj);
+                                    }
+                                    else {
                                         let messa = data.data.message;
                                         setmess(messa)
                                     }
